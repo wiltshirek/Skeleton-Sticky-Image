@@ -1,26 +1,732 @@
 <?php echo $this->doctype(); ?>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
+<head>
+<meta charset="utf-8">
         <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        				->prependStylesheet($this->basePath() . '/css/common.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
                         ->prependStylesheet($this->basePath() . '/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') 
+                        ->prependStylesheet($this->basePath() . '/css/stylesheet.css')
+                        ?>
+                        
+                        
+                        
+         <!-- stylesheet of freedcamp -->
+<!--link rel="stylesheet" type="text/css"
+	href="https://freedcamp.com/css/stylesheet.css" media="screen"
+	title="Main Stylesheet" /-->
+<link rel="stylesheet" type="text/css"
+	href="https://freedcamp.com/css/print.css" media="print" />
+<style>
+.statuses li.status:nth-child(even) {
+	background-color: #f0f0f0;
+	text-shadow: 0px 1px 0px #fff;
+} 
 
-        <!-- Scripts -->
+.statuses li.status {
+	padding: 5px 0px 5px 5px;
+	position: relative;
+}
+
+li.status .delete_residents {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	display: block;
+	background: url(https://freedcamp.com/images/statuses/delete.png)
+		no-repeat top center;
+	width: 9px;
+	height: 9px;
+	text-indent: -99999px;
+}
+
+li:hover>.delete_residents {
+	background-position: center center;
+}
+
+li.status .delete_residents:hover {
+	background-position: bottom center;
+}
+
+.statuses li.status p {
+	padding: 5px;
+	width: 95%;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color: #666;
+	font-size: 1.6em;
+	margin: 0px;
+}
+
+.statuses li.status .info {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	color: #666;
+	margin-bottom: 3px;
+	display: block;
+}
+
+li.status .info abbr.timeago {
+	border-bottom: none;
+	text-decoration: none;
+}
+
+li.status .status_content {
+	white-space: pre-line;
+	word-wrap: break-word;
+}
+
+.statuses li.status .actions_pill {
+	float: right;
+	margin-top: 5px;
+}
+
+ul.whos_online li {
+	margin-bottom: 5px;
+}
+
+ul.whos_online li>abbr {
+	display: none;
+}
+
+ul.whos_offline li {
+	margin-bottom: 5px;
+}
+
+.online {
+	border-left: 5px solid #02b10f;
+	padding-left: 5px;
+}
+
+.offline {
+	border-left: 5px solid #ddd;
+	padding-left: 5px;
+}
+
+.comment_insert {
+	width: 500px;
+}
+
+ul.statuses_comments {
+	margin-left: 15px;
+	margin-bottom: 0px;
+	border-left: 1px dashed #ddd;
+}
+
+.statuses li.status:nth-child(even) .statuses_comments {
+	border-left: 1px dashed #ccc;
+}
+
+.statuses_comments li {
+	padding-left: 10px;
+	position: relative;
+	float: none;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+}
+
+.statuses_comments li .comment_content {
+	color: #444;
+}
+
+.statuses li input.new_comment {
+	width: 90%;
+	height: 12px;
+	border-radius: 0px;
+	border-bottom-color: #ddd;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.statuses li input.new_comment:focus {
+	border-color: #999;
+}
+
+.add_status {
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #ccc;
+	background-color: #f0f0f0;
+	padding: 10px;
+}
+
+.remaining {
+	padding-top: 6px;
+	margin-left: 90px;
+	display: block;
+	color: #666;
+}
+
+.private {
+	position: relative;
+}
+
+.private a {
+	display: block;
+	padding: 5px 24px 5px 5px;
+	background: #f0f0f0 url(https://freedcamp.com/images/wall/private.png)
+		right center no-repeat;
+	border-top: 1px solid #f0f0f0;
+	border-right: 1px solid #f0f0f0;
+	border-left: 1px solid #f0f0f0;
+	float: left;
+	color: #666;
+	text-shadow: 0px 1px 0px #f0f0f0;
+}
+
+.private a.active {
+	display: block;
+	padding: 5px 24px 5px 5px;
+	background: #f0f0f0 url(https://freedcamp.com/images/wall/private.png)
+		right center no-repeat;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	float: left;
+	color: #666;
+	text-shadow: 0px 1px 0px #fff;
+	position: relative;
+	z-index: 99;
+}
+
+.private .choose {
+	position: absolute;
+	display: none;
+	left: 0px;
+	top: 24px;
+	z-index: 9;
+	background-color: #f0f0f0;
+	border-left: 1px solid #ddd;
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	padding: 10px;
+	border-top: 1px solid #ddd;
+}
+
+.private .choose label {
+	display: inline-block;
+	padding: 3px;
+	color: #777;
+	text-shadow: 0px 1px 0px #fff;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 11px;
+}
+
+.view_more {
+	border-top: 1px solid #ddd;
+	background: #f0f0f0
+		url(https://freedcamp.com/images/wall/load_more_left.png) left center
+		no-repeat;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	margin-bottom: 15px;
+	border-bottom: 1px solid #ccc;
+}
+
+.view_more .add_more {
+	display: block;
+	border-top: 1px solid #fff;
+	background: url(https://freedcamp.com/images/wall/load_more_right.png)
+		no-repeat right center;
+	padding: 10px;
+	color: #666;
+	text-shadow: 0px 1px 0px #fff;
+	text-align: center;
+	font-weight: 600;
+}
+
+.private_users {
+	color: #999;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	padding: 2px;
+	display: inline-block;
+	position: relative;
+	width: 11px;
+}
+
+.private_users span {
+	color: #fff;
+}
+
+li.status.private_status {
+	background: url(https://freedcamp.com/images/wall/private_status.png)
+		bottom right no-repeat;
+}
+
+.private_users .users_list {
+	display: none;
+}
+
+div.twipsy .twipsy-inner {
+	width: 150px;
+	text-align: left;
+}
+
+.private_users ul li {
+	padding: 2px;
+}
+</style>
+<style>
+a.reorder_projects {
+	border-top: 1px solid #ccc;
+	display: block;
+	padding: 5px 5px 5px 20px;
+	font-style: italic;
+	background: url(https://d2fqpvpm0eatx9.cloudfront.net/reorder.png)
+		no-repeat left center;
+	color: #666;
+}
+
+a.reorder_projects:hover {
+	background-color: #fff;
+}
+</style>
+
+
+
+
+
+
+<!-- Scripts -->
         <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                                       ->prependFile($this->basePath() . '/js/bootstrap.min.js')
                                       ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
 
-    </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
+    
+    
+    
+    
+    
+    <script>
+            // Freedcamp Global Object
+            var fc = {};
+            // set global vars
+            var userid = 178405;
+            var base_url = 'https://freedcamp.com/';
+            var project_unique_name = 'Test_project_na_ASU';
+            var group_unique_name = 'Test_group_name_hQ8';
+            var url_to_project_unique_name = 'https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU';
+            var url_to_application = 'Test_group_name_hQ8/Test_project_na_ASU/wall';
+            var user_project_role_type = '2';
+            var popup_open = false;
+        </script>
+<!--[if lt IE 9]><script src="https://freedcampfiles.s3.amazonaws.com/resources/js/shiv.js"></script><![endif]-->
+<script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jquery.js"></script>
+<script src="https://freedcamp.com/js/jqcookie.js"></script>
+<script src="https://d2fqpvpm0eatx9.cloudfront.net/date.js"></script>
+<script
+	src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jqueryui/jquery-ui-1.8.12.custom.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jqueryui/jquery-ui-1.8.7.custom.css"
+	media="all" />
+
+<!-- CKEDITOR -->
+<script type="text/javascript"
+	src="https://d2fqpvpm0eatx9.cloudfront.net/ckeditor411/ckeditor.js"></script>
+<script type="text/javascript"
+	src="https://d2fqpvpm0eatx9.cloudfront.net/ckeditor/adapters/jquery.js"></script>
+
+<script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/timeago.js"></script>
+<script type="javascript"
+	src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/notifications.js"></script>
+<script src="https://d3dy5gmtp8yhk7.cloudfront.net/2.0/pusher.min.js"></script>
+<!-- pusher -->
+<script type="text/javascript">
+            Pusher.channel_auth_endpoint = 'https://freedcamp.com/pusher/auth';
+            var pusher = new Pusher('158a9176f0bbd0495a9b');
+
+                        var project_Test_project_na_ASU_channel = pusher.subscribe('project_Test_project_na_ASU');
+
+            project_Test_project_na_ASU_channel.bind('notification', function(data) {
+                open_notification(data, 2000);
+            });
+            
+                        var group_Test_group_name_hQ8_channel = pusher.subscribe('group_Test_group_name_hQ8');
+
+                             
+            var user_channel = pusher.subscribe('user_178405');
+
+            user_channel.bind('notification', function(data) {
+                open_notification(data, 2000);
+            });
+
+                        var presence_Test_group_name_hQ8 = pusher.subscribe('presence-Test_group_name_hQ8');
+            
+        </script>
+<script>
+        function site_url(url) {
+                        return 'https://freedcamp.com/Test_project_na_ASU' + url;
+                }
+        </script>
+
+<script type="text/javascript">
+    var current_count = 0;
+    var current_offset = 0;
+    var increment = 10;
+    var userid_string = '178405';
+
+    $(function(){
+
+        // Private User Stuff
+        $(".private_users_link").live({mouseenter:function(){
+                $(this).parents(".private_users").find(".users_list").stop().fadeTo('10',0.8);;
+            },mouseleave: function(){
+                $(this).parents(".private_users").find(".users_list").stop().fadeOut(400);
+            }});
+
+        if (current_count < increment) {
+            $('.view_more').hide();
+        }
+
+        $("form.new_comment").live("submit", function(){
+            var $th = $(this);
+            var $th_comm = $th.find(".new_comment");
+            if($th_comm.val().length) {
+                $.submitComment( $th.attr("data-id"), $th_comm.val() );
+                $th_comm.val("");
+            }
+            return false;
+        });
+		
+                try {
+            group_Test_group_name_hQ8_channel.bind('add_status', function(data) {
+                var data = $.parseJSON(data);
+                if (data.message.assigned_to_id == 0 && userid != data.message.user_id) {
+                    var new_status = status_template(data.message.id, data.message.avatar, data.message.user_info.first_name, data.message.user_info.last_name, data.message.insert_date, data.message.status, data.message.private_users, false);
+                    $('.statuses').prepend(new_status);
+                    $('abbr.timeago').timeago();
+                } else {
+                    var assigned_to = $.parseJSON(data.message.assigned_to_id);
+                    if ($.inArray(userid_string, assigned_to) >= 0 && userid != data.message.user_id) {
+                        var new_status = status_template(data.message.id, data.message.avatar, data.message.user_info.first_name, data.message.user_info.last_name, data.message.insert_date, data.message.status, data.message.private_users, false);
+                        $('.statuses').prepend(new_status);
+                        $('abbr.timeago').timeago();
+                    }
+                }
+            });
+
+            group_Test_group_name_hQ8_channel.bind('add_comment', function(data) {
+                var data = $.parseJSON(data);
+                if ($('#status_' + data.message.status_id)[0] && userid != data.message.userid) {
+                    var new_comment = comments_template(data.message.commentid, data.message.avatar, data.message.user_fullname, data.message.date, data.message.description, false);
+                    $('#status_' + data.message.status_id).find('.statuses_comments').append(new_comment);
+                    $('abbr.timeago').timeago();
+                }
+            });
+        } catch(err) {
+            console.log(err);
+        }
+		
+    
+        $(".add_status").submit(function(){
+            $.submitStatus();
+            return false;
+        });
+        $('.users_checklist').change(function() {
+            if ($('.everyone_checklist').is(':checked')) {
+                $('.everyone_checklist').attr('checked', false);
+                $('.private').find('a').html('Private');
+            } else {
+                $('.everyone_checklist').attr('checked', false);
+                $('.private').find('a').html('Private');
+            }
+            if (!$('.users_checklist').is(':checked')) {
+                $('.everyone_checklist').attr('checked', true);
+                $('.private').find('a').html('Everyone');
+            }
+        });
+        $('.everyone_checklist').change(function() {
+            $('.users_checklist').attr('checked', false);
+            $('.private').find('a').html('Everyone');
+        });
+        $(".private a").click(function(e){ e.preventDefault();
+            var $pr = $(this).parents(".private");
+            $pr.find(".choose").toggle();
+            $(this).toggleClass("active");
+        });
+
+        $('.add_more').click(function(e) { e.preventDefault();
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/get/'+increment+'/'+current_offset;
+
+            ajaxRequest(
+                url,                
+                function(return_data) {
+			var data = return_data.data;
+                    var data_count = data.length;
+                    for(var i = 0; i < data_count; i++) {
+
+                        var close = false;
+                        if (data[i].user_id == userid) {
+                            close = true;
+                        }
+
+                        var new_status = status_template(data[i].id, data[i].avatar, data[i].first_name, data[i].last_name, data[i].insert_date, data[i].status, data[i].private_users, close);
+
+                        $('.statuses').append(new_status);
+
+                        var comment_count = data[i].comment_count;
+
+                        if (comment_count > 3) {
+                            $('#status_' + data[i].id).find('.statuses_comments').append(more_comments_template(data[i].id, comment_count-3));
+                        }
+
+                        for(var t = 0; t < data[i].comments.length; t++) {
+
+                            var close = false;
+                            if (data[i].comments[t].userid == userid) {
+                                close = true;
+                            }
+
+                            var new_comment = comments_template(data[i].comments[t].commentid, data[i].comments[t].avatar, data[i].comments[t].comment_userdata.fullname, data[i].comments[t].date, data[i].comments[t].description, close);
+                            $('#status_' + data[i].id).find('.statuses_comments').append(new_comment);
+                        }
+
+                        $('abbr.timeago').timeago();
+                    }
+                    current_offset += data_count;
+                    if (data_count < increment) {
+                        $('.view_more').hide();
+                    }
+                }
+            );
+        });
+
+        $('.more_comments').live('click', function(e) { e.preventDefault();
+            var item_id = $(this).attr('title');
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/comment/get/'+item_id;
+            var $th = $(this);
+            ajaxRequest( 
+		url,			
+		function(return_data) {
+			var data =return_data.data;					
+			var data_count = data.length;
+			for(var i = data_count-1; i >= 0; i--) {
+				var close = false;
+				if (data[i].userid == userid) {
+					close = true;
+				}
+				var new_comment = comments_template(data[i].commentid, data[i].avatar, data[i].comment_userdata.fullname, data[i].date, data[i].description, close);
+				$('#status_' + data[i].item_id).find('.statuses_comments').prepend(new_comment);
+				$('abbr.timeago').timeago();
+			}
+			$th.parent().hide();
+		}
+            );
+        });
+    });
+
+
+    function close_share() {
+        $(".private .choose").hide();
+        $(".private a").removeClass("active");
+    }
+    try {
+        presence_Test_group_name_hQ8.bind('pusher:subscription_succeeded', function(members) {
+            members.each(function(member) {
+                    $("#user_"+member.id).removeClass("offline").addClass("online").appendTo('.whos_online');
+            });
+        });
+
+        presence_Test_group_name_hQ8.bind('pusher:member_added', function(member) {
+            $("#user_"+member.id).removeClass("offline").addClass("online").appendTo('.whos_online');
+        });
+
+        presence_Test_group_name_hQ8.bind('pusher:member_removed', function(member) {
+            $("#user_"+member.id).removeClass("online").addClass("offline").appendTo('.whos_offline');
+        });
+    } catch(err) {
+        console.log(err);
+    }
+
+
+    function status_template(id, avatar, first_name, last_name, insert_date, status, private_users, close) {
+        var new_status = '';
+        new_status +='<li class="status ';
+
+        if (private_users) {
+            new_status += 'private_status';
+        }
+
+        new_status += '" id="status_'+id+'">';
+        new_status +='	<img src="'+avatar+'" width="40" height="40" class="left" style="margin-right:10px;" />';
+        if (close) {
+            new_status +='	<a class="delete_residents" onclick="$.deleteStatus('+id+');">X</a>';
+        }
+        new_status +='	<span class="info">';
+        new_status +='		<span class="name">'+first_name + ' ' + last_name+' </span>';
+        new_status +='		<abbr class="timeago" title="'+ insert_date+ '"></abbr>';
+        if (private_users) {
+            new_status +=' <div class="private_users"><a class="private_users_link"><img src="https://freedcamp.com/images/wall/private_users.png" width="8" height="11" alt="Private" /></a>';
+            new_status +='             <div class="users_list twipsy below">';
+            new_status +='             	<div class="twipsy-arrow"></div>';
+            new_status +='                 <div class="twipsy-inner">';
+            new_status +='                 	<ul class="unstyled">';
+            var count = private_users.length;
+            for(var i = 0; i < count; i++) {
+                new_status += '<li>'+private_users[i].first_name + ' ' + private_users[i].last_name +' </li>';
+            }
+            new_status +=' </ul>';
+            new_status +='                </div>';
+            new_status +='            </div>';
+            new_status +='        </div><!-- private_users -->';
+        }
+        new_status +='	</span>';
+        new_status +='	<div class="status_content">';
+        new_status +='		' + status + '';
+        new_status +='	</div>';
+        new_status +='	<div class="clear" style="height:10px;"></div>';
+        new_status +='	<ul class="statuses_comments unstyled">';
+        new_status +='	';
+        new_status +='	</ul>';
+        new_status +='	<div>';
+        new_status +='		<form class="new_comment" data-id="'+id+'">';
+        new_status +='			<input class="new_comment" placeholder="enter comment..." type="text" />';
+        new_status +='		</form>';
+        new_status +='	</div>';
+        new_status +='</li>';
+        return new_status;
+    }
+
+    function comments_template(commentid, avatar, user_fullname, date, description, close) {
+        var comment_element = '';
+        comment_element +=
+            '<li id="comment_'+commentid+'">' +
+            '<img src="'+avatar+'" width="30" height="30" class="left" style="margin-right:10px;" />' +
+            '<div class="info">' +
+            user_fullname +
+            ' <abbr class="timeago" title="'+date+'"></abbr>' +
+            '</div>' +
+            '<div class="comment_content">'+ description + '</div>';
+        if (close) {
+            comment_element += '<a class="delete_residents" onclick="$.deleteComment('+commentid+');">x</a>';
+        }
+        comment_element += '<div class="clear"></div>' +
+            '</li>';
+        return comment_element;
+    }
+
+    function more_comments_template(status_id, count) {
+        return '<li><a href="#" class="more_comments" title="'+status_id+'">View '+count+' more...</a></li>';
+    }
+
+    $.submitStatus = function() {
+
+        var postData = {};
+
+        postData['status'] = $('#new_status').val();
+
+        postData['users'] = $('.users_checklist').serializeArray();
+
+        var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/add';
+
+        ajaxRequest(
+           url,
+           postData,
+           function(return_data) {
+		var data = return_data.data;
+                var new_status = status_template(data.id, data.avatar, data.user_info.first_name, data.user_info.last_name, data.insert_date, data.status, data.private_users, true);
+                $('.statuses').prepend(new_status);
+                $('abbr.timeago').timeago();
+                $('#new_status').val('');
+                close_share();
+            }
+        );
+
+    }
+
+    $.deleteStatus = function(status_id) {
+        if(confirm('Are you sure you want to delete that?')) {
+            var postData = {};
+            postData['id'] = status_id;
+
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/delete';
+
+            ajaxRequest( url,
+		postData,               
+                function(data) {                    
+                       $('#status_' + status_id).remove();                    
+                }
+            );
+        }
+    }
+    $.submitComment = function(status_id, comment) {
+
+        var postData = {};
+        postData['status_id'] = status_id;
+        postData['comment'] = comment;
+
+        var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/comment/add';
+
+        ajaxRequest(
+            url,
+	     postData,            
+            function(return_data) {
+		var data = return_data.data;
+                var comment_element = comments_template(data.commentid, data.avatar, data.user_fullname, data.date, data.description, true);
+                $('#status_' + status_id).find('.statuses_comments').append(comment_element);
+                $('abbr.timeago').timeago();
+            }
+        );
+    }
+
+    $.deleteComment = function(comment_id) {
+        if(confirm('Are you sure you want to delete that?')) {
+            var postData = {};
+            postData['comment_id'] = comment_id;
+
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/comment/delete';
+
+            ajaxRequest(
+                url,
+                postData,                
+                function(data) {                    
+			$('#comment_' + comment_id).remove();                    
+                }
+            );
+        }
+    }
+
+</script>
+<script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-677733-6']);
+            _gaq.push(['_setDomainName', 'freedcamp.com']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="z user zulutrade">
+	<!--div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -34,16 +740,42 @@
                             <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <?php echo $this->content; ?>
+	</div>
+	</div>
+	</div>
+	<div class="site-wrapper">
+		<!-- div class="container">
+          
+            <!--?php echo $this->content; ?-->
             <hr>
-            <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-            </footer>
-        </div> <!-- /container -->
+			<footer>
+			
+			
+				<!--  p>&copy; 2013 - <?php echo date('Y') ?> by Wiltshire K. <?php echo $this->translate('All rights reserved.') ?></p-->
+			</footer>
+		</div-->
+		<!-- /container -->
+		
+		
+		
+		<div id="container">
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+        $('#container').load('/default/index/list/format/html');
+  });
+</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+	<!-- monitor site wrapper -->
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

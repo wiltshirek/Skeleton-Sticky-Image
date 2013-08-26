@@ -1,0 +1,940 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    	<meta charset=utf-8>
+        <title>Freedcamp - Todos</title>
+        <script>
+            // Freedcamp Global Object
+            var fc = {};
+            // set global vars
+            var userid = 178405;
+            var base_url = 'https://freedcamp.com/';
+            var project_unique_name = 'Test_project_na_ASU';
+            var group_unique_name = 'Test_group_name_hQ8';
+            var url_to_project_unique_name = 'https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU';
+            var url_to_application = 'Test_group_name_hQ8/Test_project_na_ASU/todos';
+            var user_project_role_type = '2';
+            var popup_open = false;
+        </script>
+        <!--[if lt IE 9]><script src="https://freedcampfiles.s3.amazonaws.com/resources/js/shiv.js"></script><![endif]-->
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jquery.js"></script>
+        <script src="https://freedcamp.com/js/jqcookie.js"></script>
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/date.js"></script>
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jqueryui/jquery-ui-1.8.12.custom.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jqueryui/jquery-ui-1.8.7.custom.css" media="all" />
+
+        <!-- CKEDITOR -->
+        <script type="text/javascript" src="https://d2fqpvpm0eatx9.cloudfront.net/ckeditor411/ckeditor.js"></script>
+        <script type="text/javascript" src="https://d2fqpvpm0eatx9.cloudfront.net/ckeditor/adapters/jquery.js"></script>
+
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/timeago.js"></script>
+        <script type="javascript" src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/notifications.js"></script>
+        <script src="https://d3dy5gmtp8yhk7.cloudfront.net/2.0/pusher.min.js"></script>
+        <!-- pusher -->
+        <script type="text/javascript">
+            Pusher.channel_auth_endpoint = 'https://freedcamp.com/pusher/auth';
+            var pusher = new Pusher('158a9176f0bbd0495a9b');
+
+                        var project_Test_project_na_ASU_channel = pusher.subscribe('project_Test_project_na_ASU');
+
+            project_Test_project_na_ASU_channel.bind('notification', function(data) {
+                open_notification(data, 2000);
+            });
+            
+                        var group_Test_group_name_hQ8_channel = pusher.subscribe('group_Test_group_name_hQ8');
+
+                                group_Test_group_name_hQ8_channel.bind('notification', function(data) {
+                    open_notification(data, 2000);
+                });
+                             
+            var user_channel = pusher.subscribe('user_178405');
+
+            user_channel.bind('notification', function(data) {
+                open_notification(data, 2000);
+            });
+
+                        var presence_Test_group_name_hQ8 = pusher.subscribe('presence-Test_group_name_hQ8');
+            
+        </script>
+        <script>
+        function site_url(url) {
+                        return 'https://freedcamp.com/Test_project_na_ASU' + url;
+                }
+        </script>
+        <!-- stylesheet of freedcamp -->
+        <link rel="stylesheet" type="text/css" href="https://freedcamp.com/css/stylesheet.css" media="screen" title="Main Stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://freedcamp.com/css/print.css" media="print" />
+        <script src="https://freedcamp.com/js/store+json2.js"></script>
+<script type="text/javascript">
+
+    $.todosOrderBy = function(order_by, param) {
+
+        var postData = {};
+        postData['order_by'] = order_by;    
+        postData['param'] = param;
+        postData['order_direction'] = 'desc';
+        
+        var url = url_to_project_unique_name + '/todos/get_todos';
+		
+        ajaxRequest(
+            url,
+            postData,            
+            function(return_data) {
+                                
+                    var data = return_data.data;
+                    $("li.td.hide").removeClass("hide");
+                    if(data.length > 0) {
+                        $('.remove_sorting').css('display','block');
+                        $("li.td").addClass("hide");
+                        for (i in data) {
+                            $("#todo_"+data[i]['id']).removeClass("hide");
+                        }
+                    } else {
+                        $("li.td").addClass("hide");
+                    }
+            }
+        );
+    }
+    
+    $.todosAssignedTo = function(assigned_to_id) {
+        $.todosOrderBy('assigned_to_id',assigned_to_id);
+    }
+    $.todosPriority = function(priority) {
+        $.todosOrderBy('priority',priority);
+    }
+    
+    $.cancelSortTodos = function() {
+        $('.remove_sorting').css('display','none');
+        $("li.td.hide").removeClass("hide");
+    }
+</script>
+<style>
+    .highlighted {
+        -webkit-animation-duration: 1.6s;
+        -moz-animation-duration: 1.6s;
+        -o-animation-duration: 1.6s;
+        animation-duration: 1.6s;
+        -webkit-animation-fill-mode: both;
+        -moz-animation-fill-mode: both;
+        -o-animation-fill-mode: both;
+        animation-fill-mode: both;
+        -webkit-animation-name: highlight;
+        -moz-animation-name: highlight;
+        -o-animation-name: highlight;
+        animation-name: highlight;
+    }
+    @-webkit-keyframes highlight {
+        0% {
+            background-color: #fff;
+        }
+        50% {
+            background-color: #f3f0aa;
+        }
+        100% {
+            background-color: #fff;
+        }
+    }
+
+    @-moz-keyframes highlight {
+        0% {
+            background-color: #fff;
+        }
+        50% {
+            background-color: #f3f0aa;
+        }
+        100% {
+            background-color: #fff;
+        }
+    }
+
+    @-o-keyframes highlight {
+        0% {
+            background-color: #fff;
+        }
+        50% {
+            background-color: #f3f0aa;
+        }
+        100% {
+            background-color: #fff;
+        }
+    }
+    @keyframes highlight {
+        0% {
+            background-color: #fff;
+        }
+        50% {
+            background-color: #f3f0aa;
+        }
+        100% {
+            background-color: #fff;
+        }
+    }
+</style>        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-677733-6']);
+            _gaq.push(['_setDomainName', 'freedcamp.com']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+    <body>
+                
+        <!-- DIALOG CONFIRM -->
+        <div id="confirm_dialog"> <div class="title">Are you sure?</div> <div class="buttons"> <a href="#" class="yes">Yes</a> <a href="#" class="no">No</a> </div> </div>
+        <!-- END DIALOG CONFIRM -->
+        <!-- Start Alexa Certify Javascript -->
+        <script type="text/javascript" src="https://d31qbv1cthcecs.cloudfront.net/atrk.js"></script><script type="text/javascript">_atrk_opts = { atrk_acct: "OQOvg1aAQ700Ws", domain:"freedcamp.com"}; atrk ();</script><noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=OQOvg1aAQ700Ws" style="display:none" height="1" width="1" alt="" /></noscript>
+        <!-- End Alexa Certify Javascript -->
+        <div class="ajax_loading" style="display:none; position:fixed; top:0px; left:0px; z-index:9999999; height:16px; width:16px; padding:5px; background-color:#33ac00;"><img src="https://freedcamp.com/images/header/loading.gif" width="16" height="16" alt="loading" /></div>
+        <div id="notification_container" style="display:none; position:fixed; bottom:10px; left:10px; overflow:auto; z-index:999999; width:200px;"></div>
+        <div id="alert_container" style="display:none; position:fixed; bottom:-5px; left:50%; margin-left:-215px; padding:20px 20px 5px 90px; overflow:auto; z-index:999999; width:350px; background:#991a1a url(https://d2fqpvpm0eatx9.cloudfront.net/error.png) no-repeat 20px center; color:#fff; border:1px solid #881414; box-shadow: 0 0 18px 1px rgba(0,0,0,0.47), inset 0 0 0 1px rgba(255,255,255,0.6);"></div>
+        <div class="flash_message hide"></div><!-- flash_message -->
+        <div style="display:none; background-color: rgba(0, 0, 0, 0.4); position:fixed; top:0px; left:0px; z-index:99999; bottom:0px; right:0px;" class="darken"></div>
+        <div class="lighten"></div>
+        <div class="modal">
+            <div class="form">
+
+            </div><!-- form -->
+        </div><!-- modal -->
+        <!-- MOBILE SUGGESTION -->
+        <script>
+            $(function(){
+                if (localStorage.getItem("mobileHide") === null) {
+                    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+                        $("#mobilePopup").show();
+                    }
+                }
+                $("#no_mobile").click(function(e){e.preventDefault();
+                    localStorage.setItem("mobileHide","true");
+                    $("#mobilePopup").hide();
+                });
+            });
+        </script>
+        <div id="mobilePopup" style="position: fixed; display:none; top:10px; left:10px; right:10px; bottom:10px; overflow:auto; background-color:rgba(0,0,0,0.7); z-index: 9999999999; color:#fff; font-size:50px; padding:20px; padding-top:50px; text-align:center; line-height:1.8em; ">
+               <div style="margin-bottom:40px;"> You are on a mobile device, would you like to try <a href="http://m.freedcamp.com" style="color:#fff; font-weight:600; text-decoration: underline;">Freedcamp Mobile</a>? </div>
+               <div><a href="#" id="no_mobile" style="display:block; color:#fff; font-size:1.1em; font-weight:600; padding:10px; background-color:rgba(255,255,255,0.2); text-shadow:0px 1px 0px #000">No Thanks!</a></div>
+        </div>
+        <!-- MOBILE SUGGESTION END -->
+        <noscript>
+            <style>
+                .noscript {position:absolute; top:20%; left:20%; padding:50px; width:500px; height:350px; box-shadow:0 0 5px #000; -moz-box-shadow:0 0 5px #000; border:5px solid #ccc; font-family:Georgia, "Times New Roman", Times, serif; background-color:#fff; z-index:9999999; font-size:1.4em;}
+            </style>
+            <div class="noscript">
+                Please turn javascript on! This website was built using the latest technologies which require JavaScript to function properly!
+            </div>
+        </noscript>
+                <ul class="timer_widget">
+            <li class="handle hidden">
+                <a>
+                                    <img class="widget_indicator" src="https://freedcamp.com/images/timer/inactive.gif" width="27" height="6" alt="active" class="indicator left" />
+                                    <img src="https://freedcamp.com/images/timer/clock.png" width="15" height="16" class="left" /> <span class="label">timers</span>
+                </a>
+                <ul >
+                                                           <li class="add"><a class="load_popup" href="#" data-href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/time/add"><img src="https://freedcamp.com/images/timer/add.png" alt="add time task" class="left" /> add new time task</a></li>
+                </ul>
+                
+            </li>
+        </ul> <!-- timer_widget -->
+                <div class="user_bar">
+            <div class="inner body_width">
+                <div class="left">
+                                        <a href="https://freedcamp.com/dashboard" class="main_dashboard"><img src="https://freedcamp.com/images/header/main_dashboard.png" width="6" height="8"> back to main dashboard</a>
+                                    </div><!-- left -->
+                <div class="right">
+                    <ul id="user_management">
+                        <li><a class="load_popup upgrade_storage" href="#" data-href="https://freedcamp.com/manage/applications/storage/purchase">upgrade storage</a></li>
+                        <li><a href="https://freedcamp.com/manage/account">my account</a></li>
+                        <li><a href="https://freedcamp.com/help">help</a></li>
+                        <li style="border-right:none;"><a href="https://freedcamp.com/logout">logout</a></li>
+                    </ul>
+                </div><!-- right -->
+                <div class="clear" style="height:0px;"></div>
+            </div><!-- user_bar > inner -->
+        </div><!-- user_bar -->
+    <header class="body_width">
+        <div class="project_bar">
+            <div class="left">
+                            <ul class="switcher unstyled" id="switcher">
+                                    <li class="current"><a class="project">Test project name</a> <a class="group_link">Test group name</a>
+                                	<div class="clear"></div>
+                        <div class="groups">
+                                                                                                <ul class="group unstyled">
+                                        <li><a href="https://freedcamp.com/Test_group_name_hQ8">Test group name</a>
+                                            <ul class="unstyled">
+                                                                                                                                                <li class="active">
+                                                                                                	<a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/wall">Test project name</a>
+                                                	<ul>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/todos">To-dos</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/discussions">Discussions</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/milestones">Milestones</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/time">Time</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/files">Files</a></li>
+                                                                                                            </ul><!-- apps -->
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                    </ul>
+                                                                                                                                                                                <a data-href="https://freedcamp.com/manage/projects/order" class="load_popup reorder_projects">reorder projects</a>
+                            <style> a.reorder_projects { border-top:1px solid #ccc; display: block; padding:5px 5px 5px 20px; font-style: italic; background:url(https://d2fqpvpm0eatx9.cloudfront.net/reorder.png) no-repeat left center; color:#666; } a.reorder_projects:hover {background-color:#fff; } </style>
+                        </div><!-- groups -->
+                    </li>
+                </ul><!-- switcher -->
+                            </div><!-- left -->                        
+                            <script>
+                    // Zurb jQuery Textchange Extension of jQuery
+                    (function(a){a.event.special.textchange={setup:function(){a(this).data("lastValue",this.contentEditable==="true"?a(this).html():a(this).val());a(this).bind("keyup.textchange",a.event.special.textchange.handler);a(this).bind("cut.textchange paste.textchange input.textchange",a.event.special.textchange.delayedHandler)},teardown:function(){a(this).unbind(".textchange")},handler:function(){a.event.special.textchange.triggerIfChanged(a(this))},delayedHandler:function(){var c=a(this);setTimeout(function(){a.event.special.textchange.triggerIfChanged(c)},
+                            25)},triggerIfChanged:function(a){var b=a[0].contentEditable==="true"?a.html():a.val();b!==a.data("lastValue")&&(a.trigger("textchange",[a.data("lastValue")]),a.data("lastValue",b))}};a.event.special.hastext={setup:function(){a(this).bind("textchange",a.event.special.hastext.handler)},teardown:function(){a(this).unbind("textchange",a.event.special.hastext.handler)},handler:function(c,b){b===""&&b!==a(this).val()&&a(this).trigger("hastext")}};a.event.special.notext={setup:function(){a(this).bind("textchange",
+                            a.event.special.notext.handler)},teardown:function(){a(this).unbind("textchange",a.event.special.notext.handler)},handler:function(c,b){a(this).val()===""&&a(this).val()!==b&&a(this).trigger("notext")}}})(jQuery);
+                    $(function(){
+                        var group_template = "";
+                        group_template += '<ul class="fc_search_result_group">'+
+                                            '<li class="fc_search_result_title">TODOS (5)</li>'+
+                                    '</ul>';
+                        var item_template = "";
+                        item_template += '<li class="fc_search_result_entry"><a href="#"><span class="title">And this is the title of a todo that has been found within your search query</span> <span class="fc_search_result_date">03/15/89</span></a></li>';
+
+                        var timeout;
+                        $('#fc_project_searchText').bind('textchange', function () {
+                            $th = $(this);
+                            clearTimeout(timeout);
+                            var self = this;
+                            timeout = setTimeout(function () {
+                                if ($th.val().length > 3) {
+                                    $("#fc_project_search").submit();
+                                } else {
+                                    hideSearch();
+                                }
+                            }, 1000);
+                        });
+
+                        $('#fc_project_search').submit(function(e) {
+                            e.preventDefault();
+                            // faster selector reference to store the this
+                            var $th = $(this);
+                            if ($("#fc_project_searchText").val().length > 3) {
+                                ajaxRequest(
+                                    $th.attr('action'),
+                                    $th.serializeFormJSON(),
+                                    function(data) {
+                                        $("#fc_search_results").html("");
+                                        if (data.data.applications.length == 0) {
+                                            $("#fc_search_results").append('<div>There were no results that matched your search criteria</div>');
+                                        } else {
+                                            for (i in data.data.applications) {
+                                                var group = data.data.applications[i];
+                                                var $result_group = $(group_template);
+                                                $result_group.find(".fc_search_result_title").html(i + " ("+ group.length +")");
+                                                for(a in group) {
+                                                    var $result_entry = $(item_template);
+                                                    $result_entry.find(".title").html(group[a].title);
+                                                    var date_patt=/([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2})/g;
+                                                    var res = date_patt.exec(group[a].date);
+                                                    if(res != undefined) {
+                                                        res[2] = parseInt(res[2]) - 1;
+                                                        var d = new Date(res[1], res[2], res[3], res[4], res[5], res[6]);
+                                                        $result_entry.find(".fc_search_result_date").html(d.format("shortDate"));
+                                                    }
+                                                    $result_entry.find("a").attr("href",group[a].link);
+                                                    $result_group.append($result_entry);
+                                                }
+                                                $("#fc_search_results").append($result_group);
+                                            }
+                                        }
+                                        $th.addClass("focused");
+                                    }
+                                )
+                            }
+                            return false;
+                        });
+
+                        // HANDLE ALL POSSIBLE CLOSING METHODS - Clicking X, Clicking Outside, Escape Key
+                        $("#fc_project_search a.clear_search").click(function(e){e.preventDefault();
+                            hideSearch();
+                        });
+                        $(document).mouseup(function (e) {
+                            if ($(e.target).parents("#fc_project_search").length == 0) {
+                                hideSearch()
+                            }
+                        });
+                        $(document).keydown(function(e) {
+                            if (e.keyCode == 27) {
+                                hideSearch();
+                            }
+                        });
+                        function hideSearch() {
+                            $('#fc_project_searchText').val("");
+                            $("#fc_project_search").removeClass("focused");
+                        }
+                    });
+                </script>
+                <style>
+                    #fc_project_search { float:left; margin-left:30px; margin-top:14px; position: relative; width:300px;}
+                    #fc_project_search label { text-indent:-99999px; background:#fff url(https://freedcamp.com/images/header/search.png) no-repeat 15px center; display:block; float:left; width:42px; height:30px; border:1px solid #dfdfdf; border-right:0px; margin:0px; }
+                    #fc_project_search.focused label {height:31px; position: relative; border-bottom-color: #fff; z-index:80; border-right:1px solid #dfdfdf;}
+                    #fc_project_search a.clear_search {display:none;}
+                    #fc_project_search.focused a.clear_search { position: absolute; right:55px; top:7px; background-color:#eee; color:#666; padding:2px 6px; border-radius: 10px; font-size: 11px; font-family: Arial; font-style: normal; font-weight: bold; z-index:9; display: block; }
+                    #fc_project_search input[type=text]#fc_project_searchText { border:1px solid #dfdfdf; border-left:0px; height:20px; padding:5px; background:#fff; box-shadow:none; border-radius: 0px; margin:0px; width:200px; }
+                    /*#fc_project_search.focused input[type=text]#fc_project_searchText {margin-left:44px;}*/
+                    ::-webkit-input-placeholder { color: #ddd; }
+                    :-moz-placeholder { color: #ddd; }
+                    #fc_project_search #fc_search_results {position: absolute; display:none; top:31px; left:0px; border:1px solid #dfdfdf; z-index:70; width: 600px; background-color:#fff; padding:20px; }
+                    #fc_project_search .fc_search_result_group li.fc_search_result_title {text-transform: uppercase; color:#666; font-weight: 600; font-size:10px; border-bottom:1px solid #ccc; padding-bottom:6px; margin-bottom:0px;}
+                    #fc_project_search .fc_search_result_group {margin-bottom:12px;}
+                    #fc_project_search .fc_search_result_group:last-child {margin-bottom:0px;}
+                    #fc_project_search .fc_search_result_group li:last-child a {border-bottom:none;}
+                    #fc_project_search .fc_search_result_group li a {display: block; padding:12px 3px; color:#07599F; border-bottom:1px solid #ddd; text-shadow:0px 1px 0px #fff;}
+                    #fc_project_search .fc_search_result_group li a:hover {background-color:whiteSmoke;}
+                    #fc_project_search .fc_search_result_group li a .fc_search_result_date {float:right; color:#ccc;}
+                    #fc_project_search.focused #fc_search_results {display:block;}
+                </style>
+                <form action="https://freedcamp.com/manage/Test_group_name_hQ8/Test_project_na_ASU/search" id="fc_project_search" >
+                    <label for="fc_project_searchText">search</label>
+                    <input type="text" class="searchText" id="fc_project_searchText" placeholder="search project" name="search_text" />
+                    <a href="#" class="clear_search">X</a>
+                    <div class="clear"></div>
+                    <div id="fc_search_results">
+
+                    </div>
+                </form>
+                        <div class="right">
+                <ul class="unstyled" id="management">
+                	<li id="project_templates"><a href="https://freedcamp.com/manage/templates">project templates</a></li>
+                    <li id="manage_projects"><a href="https://freedcamp.com/manage">manage projects</a></li>
+                    <li id="marketplace"><a href="https://freedcamp.com/marketplace">marketplace</a></li>
+                </ul>
+            </div><!-- right -->
+            <div class="clear" style="height:0px"></div>
+        </div><!-- project_bar -->
+        <div class="clear" style="height:0px"></div>
+    </header>
+    <div class="application_bar">
+            <ul class="applications body_width " id="applications">
+
+                            <li class="wall "><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/wall" style="background-image:url(https://freedcamp.com/cdn/group_apps/wall/images/icons/small_icon.png);">Wall</a></li>
+                                        <!-- project applications -->
+                                    <li class="active"><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/todos" style="background-image:url(https://freedcamp.com/cdn/project_apps/todos/images/icons/small_icon.png);">To-dos</a></li>
+                                    <li class=""><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/discussions" style="background-image:url(https://freedcamp.com/cdn/project_apps/discussions/images/icons/small_icon.png);">Discussions</a></li>
+                                    <li class=""><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/milestones" style="background-image:url(https://freedcamp.com/cdn/project_apps/milestones/images/icons/small_icon.png);">Milestones</a></li>
+                                    <li class=""><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/time" style="background-image:url(https://freedcamp.com/cdn/project_apps/time/images/icons/small_icon.png);">Time</a></li>
+                                    <li class=""><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/files" style="background-image:url(https://freedcamp.com/cdn/project_apps/files/images/icons/small_icon.png);">Files</a></li>
+                                <!-- group applications -->
+                                <!-- user applications -->
+                                                        <li id="marketplace_add"><a title="Add More Applications" href="#" data-href="https://freedcamp.com/manage/Test_group_name_hQ8/Test_project_na_ASU/applications" class="load_popup">&nbsp;</a></li>
+                    </ul> 
+    </div><!-- application_bar -->
+    <div class="clear"></div><div class="action_bar body_width">
+    <div class="left">
+                <span class="sort">filter</span>         
+        <ul class="sort_ul">
+<!--            <li><a href="javascript:void(0);" id="order_by_due_date" onclick="$.todosOrderBy('due_date')">date</a></li>-->
+            <li class="sort_dd">
+                <a href="javascript:void(0);">priority</a>
+                <ul class="unstyled">
+                    <li><a class="order_by_priority" onclick="$.todosPriority(1)">Low</a></li>
+                    <li><a class="order_by_priority" onclick="$.todosPriority(2)">Medium</a></li>
+                    <li><a class="order_by_priority" onclick="$.todosPriority(3)">High</a></li>
+                </ul>
+            </li>
+            <li class="sort_dd">
+                <a href="javascript:void(0);">assigned to</a> 
+                <ul class="unstyled">
+                    <li><a href="javascript:void(0);" data-sort="assigned-to" onclick="$.todosAssignedTo(-1);" data-value="-1">Everyone</a></li>
+                                        <li><a href="javascript:void(0);" data-sort="assigned-to" onclick="$.todosAssignedTo(178405);" data-value="178405">Ken Wiltshire</a></li>
+                                    </ul>
+            </li>
+            <li class="remove_sorting" style="display:none;"><a href="javascript:void(0);" onclick="$.cancelSortTodos();">cancel filter</a></li>
+        </ul>
+            </div><!-- left -->
+    <div class="right">
+        <a href="#" data-href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/todos/todos_groups" class="load_popup green_button"  >Manage To-Do Groups</a>
+    </div><!-- right -->
+    <div class="clear"></div>
+</div><!-- action_bar -->
+<div style="height:1px; background-color:#eee;"></div>
+<div class="content body_width">
+        <script type="text/javascript"> var hide_completed = false;</script>
+<script>
+$(function(){
+    // floating sidebar
+    var $sidebar   = $(".todo_right_col"),
+        $window    = $(window),
+        offset     = $sidebar.offset(),
+        topPadding = 15;
+
+    $window.scroll(function() {
+        if ($window.scrollTop() > offset.top) {
+            $sidebar.stop().animate({
+                marginTop: $window.scrollTop() - offset.top + topPadding
+            });
+        } else {
+            $sidebar.stop().animate({
+                marginTop: 0
+            });
+        }
+    });
+
+    $("#todos_container h3").click(function(){
+        $th = $(this);
+        $todos = $th.next("ul.td_group");
+        var groupid = $todos.data("group-id");
+
+        if (typeof store.get(groupid) == "undefined") {
+            store.set(groupid,"hidden");
+            $todos.hide();
+        } else {
+            if (store.get(groupid) == "hidden") {
+                store.set(groupid,"visible");
+                $todos.show();
+            } else {
+                store.set(groupid,"hidden");
+                $todos.hide();
+            }
+        }
+        $th.toggleClass("closed");
+    });
+});
+</script>
+<style>
+    #todos_container h3 {cursor: pointer;}
+    h3.closed {background:#f0f0f0 url(https://freedcamp.com/images/todos/closed.png) no-repeat 97% center; line-height: 1.1em; padding-top:5px; padding-left:10px;}
+	ul#todos_sort_results li { padding:10px 0px; color:#555; border-bottom:1px solid #ddd; }
+	ul#todos_sort_results li .content {  }
+	ul#todos_sort_results li .extra { font-family:Verdana, Geneva, sans-serif; color:#888; font-size:10px; }
+	ul#todos_sort_results li .extended { margin-bottom:0px; }
+</style>
+<ul id="todos_sort_results">
+    
+</ul>
+<div class="todo_left_col_wrap">
+    <div id="todos_container" class="todo_left_col" style="background:url(../images/todos/line.jpg) repeat-y top right;">
+        	<script>
+			$(function(){
+                // TODO REMOVE WHATEVER THIS CRAP IS :)
+                $('#due_date_260174').datepicker({dateFormat: "d M, y", altField: "#todo_due_date_260174", altFormat: "yy-mm-dd"});
+                if (typeof store.get('260174') != "undefined" && store.get('260174') == "hidden") { $("#todo-group-260174").addClass("hide"); $("#todo-group-260174").prev("h3").addClass("closed");  }
+            });
+		</script>
+        <h3>
+            General Group            <span>General Group</span>
+                            </h3>
+        <ul class="td_group unstyled" id="todo-group-260174" data-group-id="260174">
+                    <li class="td" id="todo_947836" data-todo-id="947836" data-assigned-to="0">
+                <a href="#" class="delete_td delete" data-callback="delete_td"></a>
+                <span class="drag"></span>
+                                    <a class="completion"></a>
+                                    
+                <p class="td_content">
+                    <span class="td_description" contenteditable="true">this is just a test to do</span>
+                    <span class="tag_holder">
+                        <input type="hidden" class="todoid" value="947836" />
+                        
+                                                
+                        
+                                                
+                        
+                        <span class="tag tag_comments  hide ">
+                            <a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/todos/947836/"> comments (0)</a>
+                                                    </span>
+                                                </span><!-- tag_holder -->
+                </p><!-- td_content -->
+                                    	<a class="extended"></a>
+                        <div class="clear"></div>
+                    	<p class="td_extended"><textarea>Click here to add extended description.</textarea></p><!-- td_extended -->	
+                                </li><!-- td -->
+                    <li class="td" id="todo_947839" data-todo-id="947839" data-assigned-to="-1">
+                <a href="#" class="delete_td delete" data-callback="delete_td"></a>
+                <span class="drag"></span>
+                                    <a class="completion"></a>
+                                    
+                <p class="td_content">
+                    <span class="td_description" contenteditable="true">this is another test to do</span>
+                    <span class="tag_holder">
+                        <input type="hidden" class="todoid" value="947839" />
+                        
+                                                
+                        
+                                                    <span class="tag" data-type="assigned-to" data-value="-1">Everyone<a class="remove">-</a></span>
+                                                
+                        
+                        <span class="tag tag_comments  hide ">
+                            <a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/todos/947839/"> comments (0)</a>
+                                                    </span>
+                                                </span><!-- tag_holder -->
+                </p><!-- td_content -->
+                                        <a class="extended exist"></a>
+                        <div class="clear"></div>
+                    	<p class="td_extended">
+                                <textarea>with an extended description</textarea>
+                        </p><!-- td_extended -->
+                                </li><!-- td -->
+                </ul><!-- td_group -->
+        <form class="add_td" action="" method="post">
+            <input type="hidden" class="groupid" name="groupid" value="260174" />
+            <input type="text" class="add_td_content" placeholder="add to-do" name="description" />
+            <fieldset>
+                <textarea class="extended_description" placeholder="extended description" name="extended_description"></textarea>
+                <label class="assign_to" style="width:240px;">Assign To
+                <select name="assigned_to_id">
+                    <option value="0">Nobody</option>
+                    <option value="-1">Everyone</option>
+                                            <option value="178405">Ken Wiltshire</option>
+                                    </select>
+                </label>
+                <label class="priority">
+                    Priority
+                    <select name="priority" class="todo_priority">
+                        <option value="0">none</option>
+                        <option value="1">low</option>
+                        <option value="2">medium</option>
+                        <option value="3">high</option>
+                    </select>
+                </label>
+                <label class="due_date_label">Due Date
+                    <input type="text" class="due_date" id="due_date_260174" />
+                    <input type="hidden" class="todo_due_date" name="due_date" id="todo_due_date_260174" />
+                </label>
+                                <input type="submit" value="add to-do" />
+                <div class="clear"></div>
+            </fieldset>
+        </form><!-- add_td -->
+        <div class="clear"></div>
+        <br />
+        </div><!-- todo_left_col -->
+</div><!-- todo_left_col_wrap -->
+<div class="todo_right_col">
+    <div class="draggables">
+    	<h3>Assign To <span>drag to assign</span></h3>
+        <ul class="assignment unstyled">
+            <li><span class="tag" data-type="assigned-to" data-value="-1">Everyone</span></li>
+                            <li><span class="tag" data-type="assigned-to" data-value="178405">Ken Wiltshire</span></li>
+                    </ul><!-- assignment -->
+        
+        <div class="clear" style="height:20px;"></div>
+        
+        <h3>Due Date <span>drag to assign</span></h3>
+        <input type="text" value="choose date then drag me" id="datepicker" />
+        
+        <div class="clear" style="height:20px;"></div>
+        
+        <h3>Priority <span>drag tag</span></h3>
+        <span class="tag pr_low" data-type="priority" data-value="1">low</span>
+        <span class="tag pr_medium" data-type="priority" data-value="2">medium</span> 
+        <span class="tag pr_high" data-type="priority" data-value="3">high</span>
+        
+        <div class="clear" style="height:20px;"></div>
+        
+        <h3>Progress <span><!-- coming soon :P <a href="#">add new</a> --></span></h3>
+        <span class="tag" data-type="progress" data-value="1">completed</span>
+        <span class="tag" data-type="progress" data-value="2">in progress</span>
+        
+        <div class="clear" style="height:20px;"></div>
+        
+        <h3>Hide Completed To-Dos</h3>
+        <a class="toggle_completed"><span>hide completed to-do's</span></a>
+        <input type="hidden" class="hide_completed" value="false" />
+    </div><!-- end draggable -->
+</div><!-- todo_right_col --></div><!-- end content -->
+<script src="https://freedcamp.com/cdn/project_apps/todos/js/todos.js?version=1"></script>
+<div class="clear"></div>
+<footer>
+</footer>
+<script src="https://freedcamp.com/js/notifications.js"></script>
+<script src="https://freedcamp.com/js/main.js?version=8"></script>
+
+<script>
+    var time_ids = new Array();
+    var refreshAfterClose = false;
+    function load_popup(data) {
+        if(!empty(data.fchref)) {
+            var link_url = data.fchref;
+        } else {
+            var link_url = (typeof data !== "object") ? data : data.href;
+        }
+        var wd = (data.width != null) ? data.width : 500;
+        var editor = (data.edit != null) ? true : false;
+        ajaxRequest(link_url, 
+        {},
+        function(response) {
+            $(".lighten").fadeIn("slow");
+            $(".modal .form").append(response.data.html);
+            $(".modal").slideDown("slow").width(wd).css({"margin-left":(-wd/2)});
+            $("html:not(:animated),body:not(:animated)").animate({ scrollTop: 0});
+            if (editor) {
+                if (data.type == 'advanced') {
+                    var editor_options = {
+                        toolbar: null,
+                        uiColor : '#F0F0F0',
+                        autoGrow_bottomSpace: '10',
+                        autoGrow_maxHeight: 400,
+                        height : '400px',
+                        width   : '95%',
+                        fillEmptyBlocks: false,
+                        IgnoreEmptyParagraphValue: true,
+                        AutoParagraph: false,
+                        scayt_autoStartup:true
+                    };
+                } else {
+                    var editor_options = {
+                        toolbar: [['Bold', 'Italic', '-', 'NumberedList', 'BulletedList','Outdent','Indent', '-','SpellChecker', 'Link', 'Unlink','-','Cut','Copy','Format','JustifyLeft','JustifyCenter','JustifyRight','-','Maximize']],
+                        uiColor : '#F0F0F0',
+                        autoGrow_bottomSpace: '10',
+                        autoGrow_maxHeight: 400,
+                        height : '100px',
+                        width   : '95%',
+                        fillEmptyBlocks: false,
+                        IgnoreEmptyParagraphValue: true,
+                        AutoParagraph: false,
+                        scayt_autoStartup:true
+                    };
+                }
+
+                $(".ckeditor").ckeditor(editor_options);
+            }
+        },
+        {type:'GET'}
+        );
+			
+    }
+    $(function(){
+		
+		// FILE DOWNLOAD OR VIEW DIALOG
+		$(".file_dialog").live("click",function(e){e.preventDefault();
+			$(".file_dialog_list_wrap").remove();
+			var $th = $(this);
+			var dialog = "";
+				dialog 	+= 	'<div class="file_dialog_list_wrap"><img src="https://freedcamp.com/images/files/dialog_arrow.png" class="dialog_arrow" />' +
+							'<ul class="file_dialog_list">' +
+							'<li class="f_view_versions"><a href="'+$th.data("versions-href")+'">View Versions & Comments</a></li>'+
+							'<li class="f_download_file"><a href="'+$th.data("download-href")+'" target="_blank">Download File</a></li>' +
+							'</ul></div>';
+				$("body").append(dialog);
+				$(".file_dialog_list_wrap").css({'left':e.pageX + 30, 'top':e.pageY - 30});	
+		});
+		$(document).mouseup(function (e) { 
+            if ($(e.target).parents(".file_dialog_list_wrap").length == 0) {
+                $(".file_dialog_list_wrap").remove();
+            }
+        });
+		
+        start_timers();
+        
+        // timeago plugin
+        $('abbr.timeago').timeago();
+
+        // userbar dropdowns
+        $("li.handle > a").live("click",function(){
+            $th = $(this).parents('.handle');
+            if ($th.hasClass("hidden")) {
+                $th.removeClass("hidden");
+                //start_timers();
+            } else {
+                $th.addClass("hidden");
+                //stop_timers();
+            }
+        });
+
+        $('.control').live('click', function(e) {
+            e.preventDefault();
+            var $th = $(this);
+            var $parent_li = $(this).parents('.time_widget_item');
+            var href = $th.attr('href');
+            ajaxRequest(href,{}, function(data) {
+                var parent = $parent_li.find('.time_widget_control');
+                var link = $parent_li.find('.control_link').val();
+                var time_id = $parent_li.attr('data-id');
+                if (time_ids.length > 0) {
+                    $('.widget_indicator').attr('src', 'https://freedcamp.com/images/timer/active.gif');
+                } else {
+                    $('.widget_indicator').attr('src', 'https://freedcamp.com/images/timer/inactive.gif');
+                }
+                if ($th.hasClass('start')) {
+                    parent.html('<a class="stop control" href="'+link+'stop/'+time_id+'" onclick="w_stop_'+time_id+'();"></a>');
+                } else {
+                    parent.html('<a class="start control" href="'+link+'start/'+time_id+'" onclick="w_start_'+time_id+'();"></a>');
+                }
+            },{type:'GET'});
+        });
+        
+        // project dropdown
+        $(".switcher > li.current").live("click", function(){
+            var $this = $(this);
+            var $parent = $this.parents("ul");
+            if ($parent.hasClass("active")) {
+                $("div.groups").slideUp(300, function(){
+                    $parent.removeClass("active");
+                });
+            } else {
+                $parent.addClass("active");
+                $("div.groups").slideDown();
+            }
+        });
+        // notifications
+        var flash_message = $(".flash_message");
+        if (!(flash_message.html() == "")) {
+            flash_action(flash_message.html());
+        }
+        function flash_action(message) {
+            var $message = $(".flash_message");
+            $message.html(message);
+            $message.slideDown().delay(2000).slideUp();
+        }
+        
+        // define flash action under jquery namespace
+        $.extend( {
+            flash_action: function(message) { 
+                var $message = $(".flash_message");
+                $message.html(message);
+                $message.slideDown().delay(2000).slideUp();
+            }
+        });
+                
+        
+        // cloase popup
+        function close_popup(reload) {
+            if ( reload )  {  window.location.reload(); }
+            popup_open = false;
+            if ($(".modal .ckeditor").length > 0) {
+                var editorID = $(".ckeditor").attr("name");
+                var instance = CKEDITOR.instances[editorID];
+                if (instance) {CKEDITOR.remove(instance);}
+            }
+            $(".lighten").hide();
+            $(".modal").slideUp("slow", function (){
+                $(".modal .form").html("");
+            });	
+        }
+        $(".load_popup").live("click", function(e){ 
+            e.preventDefault();
+            if (!popup_open) {
+                load_popup($(this).data());
+                popup_open = true;
+            }
+        });
+        
+        $(".modal .form form").live("submit", function(e){
+            
+            var $th = $(this);
+
+            // add a grayed out cover over form to let user know it's being submitted mainly for adding comments and waiting forever
+            $th.css({"position":"relative"});
+            var $cover = $('<div id="temp_cover_ajax"><img src="https://freedcamp.com//images/ajax-loader.gif" style="position:absolute; top:50%; left:50%;" /></div>');
+            $th.append($cover);
+
+            if ($th.attr("data-ignore-form") != "true") {
+                e.preventDefault();
+                $th.find("input[type=submit]").attr("disabled","true");                
+                var action = $(this).attr("action");
+                   
+                var onSuccess = function() { };
+                if(typeof($.popupCustomClose) == 'function') {
+                    onSuccess = $.popupCustomClose;
+                }
+                                
+                ajaxRequest(action,$th.serializeFormJSON(),onSuccess);
+
+                return false;
+            }            
+        });
+        
+        $(".modal .footer .cancel").live("click", function(e){
+            e.preventDefault();
+            close_popup();
+            if(refreshAfterClose) {
+                window.location.reload();
+            }
+        });
+        $(document).keydown(function(e) {
+            if (e.keyCode == 27) {
+                close_popup();
+            }
+        });
+        $(document).mouseup(function (e) { 
+            if ($(e.target).parents(".switcher").length == 0) {
+                if ($(".switcher").hasClass("active")) {
+                    $("div.groups").slideUp(300, function(){
+                        $(".switcher").removeClass("active");
+                    });
+                }
+            }
+        });
+        $(".add_new_group").live("click", function(e){
+            e.preventDefault();            
+            $(".group_dropdown").hide().remove();
+            $(".group_name").show();            
+            $(this).hide();
+        });
+        
+    });
+    function pad(number, length) {
+        var str = '' + number;
+        while (str.length < length) {
+            str = '0' + str;
+        }
+        return str;
+    }
+    
+    $(document).ajaxStart(function(){
+        ajax(true);
+    });
+    $(document).ajaxComplete(function(e, xhr){
+        ajax(false);
+        if ( xhr.status == 399 ) {
+            try {
+                var result = $.parseJSON(xhr.responseText);                
+                $(".lighten").hide();
+                var $message = $(".flash_message");
+                $message.html('Please log in to continue. <a href="https://freedcamp.com/login?location=' + url_to_application + '">Log In</a>');
+                $message.slideDown();
+            } catch (e) {
+                return;
+            }
+        }
+    });
+
+    function start_timers() {
+        };
+
+    function stop_timers() {
+        for(var i in time_ids) {
+            if (time_ids[i] != "") {
+                clearInterval(time_ids[i]);
+            }
+        }
+    };
+
+        // timer widget functions
+    </script>
+
+<script id="IntercomSettingsScriptTag">
+  var intercomSettings = {
+    app_id: 'ux9lemly',
+    email: 'wiltshirek@gmail.com', 
+    created_at: 1371236357,
+    name: 'Ken Wiltshire',
+    user_id: '178405'
+  };
+</script>
+<script>
+  (function() {
+    var i=function(){i.c(arguments)};i.q=[];
+    i.c=function(args){i.q.push(args)};window.Intercom=i;
+    function async_load() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript'; s.async = true;
+      s.src = 'https://api.intercom.io/api/js/library.js';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+    }
+    if (window.attachEvent) {
+      window.attachEvent('onload', async_load);
+    } else {
+      window.addEventListener('load', async_load, false);
+    }
+  })();
+</script>
+</body>
+</html>

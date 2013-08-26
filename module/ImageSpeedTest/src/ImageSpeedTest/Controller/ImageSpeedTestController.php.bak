@@ -1,0 +1,141 @@
+<?php
+
+
+namespace ImageSpeedTest\Controller;
+
+use Zend\View\Model\ViewModel, 
+    ImageSpeedTest\Form\ImageSpeedTestForm,
+    Doctrine\ORM\EntityManager,
+    ImageSpeedTest\Entity\ImageSpeedTest,
+	ImageSpeedTest\Utility\SimpleImage;
+use Zend\Mvc\Controller\AbstractActionController;
+
+
+
+class ImageSpeedTestController extends AbstractActionController
+{
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $em;
+
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+ 
+    public function getEntityManager()
+    {
+        if (null === $this->em) {
+            $this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+        }
+        return $this->em;
+    } 
+
+    public function indexAction()
+    {
+        return new ViewModel();
+    }
+
+    public function addAction()
+    {
+        $form = new ImageSpeedTestForm();
+        $form->get('submit')->setAttribute('label', 'Add');
+
+        $request = $this->getRequest();
+        
+        if ($request->isPost()) {
+            //$imagespeedtest = new ImageSpeedTest();
+            
+            //$form->setInputFilter($imagespeedtest->getInputFilter());
+            $form->setData($request->getPost());
+            //if ($form->isValid()) { 
+                //$imagespeedtest->populate($form->getData()); 
+                //$this->getEntityManager()->persist($imagespeedtest);
+                //$this->getEntityManager()->flush();
+
+                // Redirect to list of imagespeedtests
+                
+        	//var_dump("here is the filename" . $_FILES['uploaded_image']['tmp_name'] . " end file name");
+        	$image = new SimpleImage();
+        	var_dump($form->get("uploaded_image")->getValue());
+        	$image->load($form->get("uploaded_image")->getValue());
+        	$image->resizeToWidth(300);
+        	$image->resizeToHeight(200);
+        	$image->save('resizeImage.jpg');
+        	echo "Processed";
+            return $this->redirect()->toRoute('imagespeedtest'); 
+            
+        }
+
+        return array('form' => $form);
+    }
+
+    public function editAction()
+    {
+        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        if (!$id) {
+            return $this->redirect()->toRoute('imagespeedtest', array('action'=>'add'));
+        } 
+        $imagespeedtest = $this->getEntityManager()->find('ImageSpeedTest\Entity\ImageSpeedTest', $id);
+
+        $form = new ImageSpeedTestForm();
+        $form->setBindOnValidate(false);
+        $form->bind($imagespeedtest);
+        $form->get('submit')->setAttribute('label', 'Edit');
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $form->bindValues();
+                $this->getEntityManager()->flush();
+
+                // Redirect to list of imagespeedtests
+                return $this->redirect()->toRoute('imagespeedtest');
+            }
+        }
+
+        return array(
+            'id' => $id,
+            'form' => $form,
+        );
+    }
+
+    public function deleteAction()
+    {
+        $id = (int)$this->getEvent()->getRouteMatch()->getParam('id');
+        if (!$id) {
+            return $this->redirect()->toRoute('imagespeedtest');
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $del = $request->getPost()->get('del', 'No');
+            if ($del == 'Yes') {
+                //$id = (int)$request->getPost()->get('id');
+                $imagespeedtest = $this->getEntityManager()->find('ImageSpeedTest\Entity\ImageSpeedTest', $id);
+                
+                if ($imagespeedtest) {
+                	
+                    $this->getEntityManager()->remove($imagespeedtest);
+                    $this->getEntityManager()->flush();
+                }
+            }
+
+            // Redirect to list of imagespeedtests
+            //return $this->redirect()->toRoute('imagespeedtest');
+            
+            return $this->redirect()->toRoute('imagespeedtest', array(
+                'controller' => 'imagespeedtest',
+                'action'     => 'index',
+            ));
+            
+        }
+
+        return array(
+            'id' => $id,
+            'imagespeedtest' => $this->getEntityManager()->find('ImageSpeedTest\Entity\ImageSpeedTest', $id)->getArrayCopy()
+        );
+    }
+}

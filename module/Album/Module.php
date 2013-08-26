@@ -1,6 +1,9 @@
 <?php
 namespace Album;
-
+/**using DOCTRINE INSTEAD
+ * CLASS IS NOT IN USE
+ * TABLE GATEWAY PATTERN
+ */
 use Zend\Db\ResultSet\ResultSet;
 use Album\Model\Album;
 use Album\Model\AlbumTable;

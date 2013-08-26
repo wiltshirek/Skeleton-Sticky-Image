@@ -5,7 +5,11 @@ return array(
         'Application',
     	'DoctrineModule',
     	'DoctrineORMModule',
+    		'ImageSpeedTest',
         'Album', 
+    	'Casefile',
+    	'Stickynotes',
+    	
     ),
 
     // These are various options for the listeners attached to the ModuleManager

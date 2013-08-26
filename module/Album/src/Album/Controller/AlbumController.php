@@ -10,7 +10,8 @@ use Zend\View\Model\ViewModel,
     Doctrine\ORM\EntityManager,
     Album\Entity\Album;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Http\PhpEnvironment\Request;
+
+
 
 class AlbumController extends AbstractActionController
 {
@@ -45,11 +46,12 @@ class AlbumController extends AbstractActionController
         $form->get('submit')->setAttribute('label', 'Add');
 
         $request = $this->getRequest();
+        
         if ($request->isPost()) {
             $album = new Album();
             
             $form->setInputFilter($album->getInputFilter());
-            $form->setData($request->post());
+            $form->setData($request->getPost());
             if ($form->isValid()) { 
                 $album->populate($form->getData()); 
                 $this->getEntityManager()->persist($album);
@@ -103,21 +105,26 @@ class AlbumController extends AbstractActionController
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $del = $request->post()->get('del', 'No');
+            $del = $request->getPost()->get('del', 'No');
             if ($del == 'Yes') {
-                $id = (int)$request->post()->get('id');
+                //$id = (int)$request->getPost()->get('id');
                 $album = $this->getEntityManager()->find('Album\Entity\Album', $id);
+                
                 if ($album) {
+                	
                     $this->getEntityManager()->remove($album);
                     $this->getEntityManager()->flush();
                 }
             }
 
             // Redirect to list of albums
-            return $this->redirect()->toRoute('default', array(
+            //return $this->redirect()->toRoute('album');
+            
+            return $this->redirect()->toRoute('album', array(
                 'controller' => 'album',
                 'action'     => 'index',
             ));
+            
         }
 
         return array(

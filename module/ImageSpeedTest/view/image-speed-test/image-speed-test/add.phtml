@@ -1,0 +1,61 @@
+<?php
+
+
+// module/ImageSpeedTest/view/imagespeedtest/imagespeedtest/index.phtml:
+use Zend\Form\Element;
+use ImageSpeedTest\Utility;
+
+$title = 'My imagespeedtests title';
+$this->headTitle($title);
+
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+
+<?php
+
+$element = new Element\File('uploaded_image');
+   if( isset($_POST['submit']) ) {
+      //include('SimpleImage.php');
+   /*   echo "About to process";
+      $image = new SimpleImage();
+      $image->load($_FILES['uploaded_image']['tmp_name']);
+      $image->resizeToWidth(300);
+      $image->resizeToHeight(200);
+      $image->save('resizeImage.jpg');
+      echo "Processed";
+      //$image->output();*/
+   } else {
+
+   		$form = $this->form;
+		$form->setAttribute('action', $this->url('imagespeedtest', array('action' => 'add')));
+		$form->prepare();
+		
+		echo $this->form()->openTag($form);
+		$uploadElement = new Element\File('uploaded_image');
+		$submitElement = new Element\File('submit');
+		$submitElement->setValue('Upload');
+   		echo $this->formFile($uploadElement);  // <input type="file" name="my-file"		
+		echo $this->formSubmit($submitElement);
+		echo $this->form()->closeTag();
+   }
+   
+/*   <form action="" method="post" enctype="multipart/form-data">
+      <input type="file" name="uploaded_image" />
+      <input type="submit" name="submit" value="Upload" />
+   </form><?php
+   }*/
+   ?>
+  
+   
+
+
+
+
+
+
+
+
+
+
+

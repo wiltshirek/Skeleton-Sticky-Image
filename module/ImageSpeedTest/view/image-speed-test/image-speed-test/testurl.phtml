@@ -1,0 +1,60 @@
+<?php
+/**
+ *  snippet of html which is inserted into the layout class for display
+ */
+$title = 'Image Speed Test';
+$this->headTitle($title);
+//var_dump($this->imgInfo) ;
+?>
+<!-- quick and dirty style insert here -->
+<style>
+h4 { border-top-style: double; 
+border-top-color: purple; 
+border-top-width: thick; }
+</style>
+
+<script>
+<!--div id is passed in as a string.  eval to jquery object and manipulate html-->
+$(function(){
+	  $('.show_image').click(function(){
+	    var divId = "#" + $(this).attr('divIdAsString');
+	    $(divId).html($("<img>").attr("src", this.href));
+	    return false;
+	  });
+	});
+$(function(){
+	  $('.hide_image').click(function(){
+	    var divId = "#" + $(this).attr('divIdAsString');
+	    $(divId).html("<p>");
+	    return false;
+	  });
+	});
+</script> 
+
+
+<h1><?php echo $this->escapeHtml($title);?></h1>
+<?php $array = $this->imgInfo['imgProperties'];
+	$i=0; 
+	foreach ($array as  $value) { 
+		$i++;?>
+		<p>	
+			<?php echo $value['url'];
+			$divIdAsString=$i . "_content";?><br/>
+			<a class="show_image" divIdAsString="<?php echo $divIdAsString;?>" href='<?php echo $value['url'];?>'>Show</a>|
+			<a class="hide_image" divIdAsString="<?php echo $divIdAsString;?>">Hide</a>
+			<br/>
+			<div id="<?php echo $divIdAsString;?>"></div>
+			<?php if ($value['loadTime'] != $this->imgInfo['worstImgLoadTime']){ ?>
+				<h6> Image load time: <?php echo $value['loadTime']; ?> </h6><br/>
+			<?php }else{ ?> 
+				<h4>Warning: this image is a dog.  Worst load time: <?php echo $value['loadTime'];?></h4><br/>
+			<?php }?>	 	
+		</p>
+	
+<?php } ?>
+		<h4>Total image load time: <?php echo $this->imgInfo['totalImgLoadTime'];?> </h4><br/>
+		<h4> Average image load time: <?php echo $this->imgInfo['avgLoadTime'];?></h4><br/>			
+	
+	 
+		
+	

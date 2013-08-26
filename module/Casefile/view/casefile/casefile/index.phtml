@@ -1,0 +1,1166 @@
+<?php
+// module/Album/view/album/album/index.phtml:
+
+
+$cssActiveTab=$this->$cssActiveTab;
+
+
+
+
+switch ($cssActiveTab) {
+	case "resident":
+		$residentTabCssActive="active";
+		break;
+	case "casefile":
+		$casefileTabCssActive="active";
+		break;
+	case "security":
+		$securityTabCssActive="active";
+		break;
+	case "passes":
+		$passesTabCssActive="active";
+		break;
+	case "employeeTime":
+		$employeeTimeTabCssAcvite="active";
+		break;
+}
+
+
+
+echo 'Welcome '.($user['is_logged_in'] ? $user['first_name'] : 'Guest').'!';
+
+
+
+$title = 'Case Files';
+$this->headTitle($title);
+?>
+
+<?php
+$url = $this->url('album', array(
+    'action' => 'delete',
+    'id'     => $this->id,
+));
+?>
+
+
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+    	<meta charset=utf-8>
+        <title>Freedcamp - Residents</title>
+        <script>
+            // Freedcamp Global Object
+            var fc = {};
+            // set global vars
+            var userid = 178405;
+            var base_url = 'https://freedcamp.com/';
+            var project_unique_name = 'Test_project_na_ASU';
+            var group_unique_name = 'Test_group_name_hQ8';
+            var url_to_project_unique_name = 'https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU';
+            var url_to_application = 'Test_group_name_hQ8/Test_project_na_ASU/wall';
+            var user_project_role_type = '2';
+            var popup_open = false;
+        </script>
+        <!--[if lt IE 9]><script src="https://freedcampfiles.s3.amazonaws.com/resources/js/shiv.js"></script><![endif]-->
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jquery.js"></script>
+        <script src="https://freedcamp.com/js/jqcookie.js"></script>
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/date.js"></script>
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jqueryui/jquery-ui-1.8.12.custom.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/jqueryui/jquery-ui-1.8.7.custom.css" media="all" />
+
+        <!-- CKEDITOR -->
+        <script type="text/javascript" src="https://d2fqpvpm0eatx9.cloudfront.net/ckeditor411/ckeditor.js"></script>
+        <script type="text/javascript" src="https://d2fqpvpm0eatx9.cloudfront.net/ckeditor/adapters/jquery.js"></script>
+
+        <script src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/timeago.js"></script>
+        <script type="javascript" src="https://d2fqpvpm0eatx9.cloudfront.net/v2-6/notifications.js"></script>
+        <script src="https://d3dy5gmtp8yhk7.cloudfront.net/2.0/pusher.min.js"></script>
+        <!-- pusher -->
+        <script type="text/javascript">
+            Pusher.channel_auth_endpoint = 'https://freedcamp.com/pusher/auth';
+            var pusher = new Pusher('158a9176f0bbd0495a9b');
+
+                        var project_Test_project_na_ASU_channel = pusher.subscribe('project_Test_project_na_ASU');
+
+            project_Test_project_na_ASU_channel.bind('notification', function(data) {
+                open_notification(data, 2000);
+            });
+            
+                        var group_Test_group_name_hQ8_channel = pusher.subscribe('group_Test_group_name_hQ8');
+
+                             
+            var user_channel = pusher.subscribe('user_178405');
+
+            user_channel.bind('notification', function(data) {
+                open_notification(data, 2000);
+            });
+
+                        var presence_Test_group_name_hQ8 = pusher.subscribe('presence-Test_group_name_hQ8');
+            
+        </script>
+        <script>
+        function site_url(url) {
+                        return 'https://freedcamp.com/Test_project_na_ASU' + url;
+                }
+        </script>
+        <!-- stylesheet of freedcamp -->
+        <link rel="stylesheet" type="text/css" href="https://freedcamp.com/css/stylesheet.css" media="screen" title="Main Stylesheet" />
+        <link rel="stylesheet" type="text/css" href="https://freedcamp.com/css/print.css" media="print" />
+        <style>
+    .statuses li.status:nth-child(even) {background-color:#f0f0f0; text-shadow:0px 1px 0px #fff;}
+    .statuses li.status {padding:5px 0px 5px 5px; position:relative;}
+    li.status .delete_residents {position:absolute; top:5px; right:5px; display:block; background:url(https://freedcamp.com/images/statuses/delete.png) no-repeat top center; width:9px; height:9px; text-indent:-99999px;}
+    li:hover > .delete_residents {background-position:center center;}
+    li.status .delete_residents:hover {background-position:bottom center;}
+    .statuses li.status p {padding:5px; width:95%; font-family:Georgia, "Times New Roman", Times, serif; color:#666; font-size:1.6em; margin:0px;}
+    .statuses li.status .info { font-family:Verdana, Geneva, sans-serif; font-size:10px; color:#666; margin-bottom:3px; display:block;}
+    li.status .info abbr.timeago {border-bottom:none; text-decoration:none;}
+    li.status .status_content {white-space: pre-line; word-wrap: break-word;}
+    .statuses li.status .actions_pill {float:right; margin-top:5px;}
+
+    ul.whos_online li {margin-bottom:5px;}
+    ul.whos_online li > abbr {display: none;}
+    ul.whos_offline li {margin-bottom:5px;}
+    .online { border-left:5px solid #02b10f; padding-left:5px;}
+    .offline { border-left:5px solid #ddd; padding-left:5px;}
+    .comment_insert { width: 500px; }
+
+    ul.statuses_comments {margin-left:15px; margin-bottom:0px; border-left:1px dashed #ddd;}
+    .statuses li.status:nth-child(even) .statuses_comments {border-left:1px dashed #ccc;}
+    .statuses_comments li { padding-left:10px; position:relative; float:none; margin-bottom:5px; padding-bottom:5px;}
+    .statuses_comments li .comment_content {color:#444;}
+    .statuses li input.new_comment {width:90%; height:12px; border-radius:0px; border-bottom-color:#ddd; -moz-box-shadow:none; -webkit-box-shadow:none; box-shadow:none;}
+    .statuses li input.new_comment:focus { border-color:#999; }
+
+    .add_status {margin-bottom:10px; padding-bottom:5px; border-bottom:1px solid #ccc; background-color:#f0f0f0; padding:10px;}
+	.remaining {padding-top: 6px; margin-left: 90px; display: block; color: #666;}
+
+    .private {position:relative;}
+    .private a {display:block; padding:5px 24px 5px 5px; background:#f0f0f0 url(https://freedcamp.com/images/wall/private.png) right center no-repeat; border-top:1px solid #f0f0f0; border-right:1px solid #f0f0f0; border-left:1px solid #f0f0f0; float:left; color:#666; text-shadow:0px 1px 0px #f0f0f0;}
+    .private a.active {display:block; padding:5px 24px 5px 5px; background:#f0f0f0 url(https://freedcamp.com/images/wall/private.png) right center no-repeat; border-top:1px solid #ddd; border-right:1px solid #ddd; border-left:1px solid #ddd; float:left; color:#666; text-shadow:0px 1px 0px #fff; position:relative; z-index:99;}
+    .private .choose {position:absolute; display:none; left:0px; top:24px; z-index:9; background-color:#f0f0f0; border-left:1px solid #ddd; border-bottom:1px solid #ccc; border-right:1px solid #ccc; padding:10px; border-top:1px solid #ddd;}
+    .private .choose label {display:inline-block; padding:3px; color:#777; text-shadow:0px 1px 0px #fff; font-family:Verdana, Geneva, sans-serif; font-size:11px;}
+
+    .view_more { border-top:1px solid #ddd; background:#f0f0f0 url(https://freedcamp.com/images/wall/load_more_left.png) left center no-repeat; border-left:1px solid #ddd; border-right:1px solid #ddd; margin-bottom:15px; border-bottom:1px solid #ccc;}
+    .view_more .add_more { display:block; border-top:1px solid #fff; background:url(https://freedcamp.com/images/wall/load_more_right.png) no-repeat right center; padding:10px; color:#666; text-shadow:0px 1px 0px #fff; text-align:center; font-weight:600;}
+
+    .private_users {color:#999; font-family:Verdana, Geneva, sans-serif; font-size:10px; padding:2px; display:inline-block; position:relative; width:11px;}
+    .private_users span { color:#fff;}
+    li.status.private_status {background:url(https://freedcamp.com/images/wall/private_status.png) bottom right no-repeat;}
+    .private_users .users_list {display:none;}
+    div.twipsy .twipsy-inner { width:150px; text-align:left;}
+    .private_users ul li {padding:2px;}
+</style>
+<script type="text/javascript">
+    var current_count = 0;
+    var current_offset = 0;
+    var increment = 10;
+    var userid_string = '178405';
+
+    $(function(){
+
+        // Private User Stuff
+        $(".private_users_link").live({mouseenter:function(){
+                $(this).parents(".private_users").find(".users_list").stop().fadeTo('10',0.8);;
+            },mouseleave: function(){
+                $(this).parents(".private_users").find(".users_list").stop().fadeOut(400);
+            }});
+
+        if (current_count < increment) {
+            $('.view_more').hide();
+        }
+
+        $("form.new_comment").live("submit", function(){
+            var $th = $(this);
+            var $th_comm = $th.find(".new_comment");
+            if($th_comm.val().length) {
+                $.submitComment( $th.attr("data-id"), $th_comm.val() );
+                $th_comm.val("");
+            }
+            return false;
+        });
+		
+                try {
+            group_Test_group_name_hQ8_channel.bind('add_status', function(data) {
+                var data = $.parseJSON(data);
+                if (data.message.assigned_to_id == 0 && userid != data.message.user_id) {
+                    var new_status = status_template(data.message.id, data.message.avatar, data.message.user_info.first_name, data.message.user_info.last_name, data.message.insert_date, data.message.status, data.message.private_users, false);
+                    $('.statuses').prepend(new_status);
+                    $('abbr.timeago').timeago();
+                } else {
+                    var assigned_to = $.parseJSON(data.message.assigned_to_id);
+                    if ($.inArray(userid_string, assigned_to) >= 0 && userid != data.message.user_id) {
+                        var new_status = status_template(data.message.id, data.message.avatar, data.message.user_info.first_name, data.message.user_info.last_name, data.message.insert_date, data.message.status, data.message.private_users, false);
+                        $('.statuses').prepend(new_status);
+                        $('abbr.timeago').timeago();
+                    }
+                }
+            });
+
+            group_Test_group_name_hQ8_channel.bind('add_comment', function(data) {
+                var data = $.parseJSON(data);
+                if ($('#status_' + data.message.status_id)[0] && userid != data.message.userid) {
+                    var new_comment = comments_template(data.message.commentid, data.message.avatar, data.message.user_fullname, data.message.date, data.message.description, false);
+                    $('#status_' + data.message.status_id).find('.statuses_comments').append(new_comment);
+                    $('abbr.timeago').timeago();
+                }
+            });
+        } catch(err) {
+            console.log(err);
+        }
+		
+    
+        $(".add_status").submit(function(){
+            $.submitStatus();
+            return false;
+        });
+        $('.users_checklist').change(function() {
+            if ($('.everyone_checklist').is(':checked')) {
+                $('.everyone_checklist').attr('checked', false);
+                $('.private').find('a').html('Private');
+            } else {
+                $('.everyone_checklist').attr('checked', false);
+                $('.private').find('a').html('Private');
+            }
+            if (!$('.users_checklist').is(':checked')) {
+                $('.everyone_checklist').attr('checked', true);
+                $('.private').find('a').html('Everyone');
+            }
+        });
+        $('.everyone_checklist').change(function() {
+            $('.users_checklist').attr('checked', false);
+            $('.private').find('a').html('Everyone');
+        });
+        $(".private a").click(function(e){ e.preventDefault();
+            var $pr = $(this).parents(".private");
+            $pr.find(".choose").toggle();
+            $(this).toggleClass("active");
+        });
+
+        $('.add_more').click(function(e) { e.preventDefault();
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/get/'+increment+'/'+current_offset;
+
+            ajaxRequest(
+                url,                
+                function(return_data) {
+			var data = return_data.data;
+                    var data_count = data.length;
+                    for(var i = 0; i < data_count; i++) {
+
+                        var close = false;
+                        if (data[i].user_id == userid) {
+                            close = true;
+                        }
+
+                        var new_status = status_template(data[i].id, data[i].avatar, data[i].first_name, data[i].last_name, data[i].insert_date, data[i].status, data[i].private_users, close);
+
+                        $('.statuses').append(new_status);
+
+                        var comment_count = data[i].comment_count;
+
+                        if (comment_count > 3) {
+                            $('#status_' + data[i].id).find('.statuses_comments').append(more_comments_template(data[i].id, comment_count-3));
+                        }
+
+                        for(var t = 0; t < data[i].comments.length; t++) {
+
+                            var close = false;
+                            if (data[i].comments[t].userid == userid) {
+                                close = true;
+                            }
+
+                            var new_comment = comments_template(data[i].comments[t].commentid, data[i].comments[t].avatar, data[i].comments[t].comment_userdata.fullname, data[i].comments[t].date, data[i].comments[t].description, close);
+                            $('#status_' + data[i].id).find('.statuses_comments').append(new_comment);
+                        }
+
+                        $('abbr.timeago').timeago();
+                    }
+                    current_offset += data_count;
+                    if (data_count < increment) {
+                        $('.view_more').hide();
+                    }
+                }
+            );
+        });
+
+        $('.more_comments').live('click', function(e) { e.preventDefault();
+            var item_id = $(this).attr('title');
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/comment/get/'+item_id;
+            var $th = $(this);
+            ajaxRequest( 
+		url,			
+		function(return_data) {
+			var data =return_data.data;					
+			var data_count = data.length;
+			for(var i = data_count-1; i >= 0; i--) {
+				var close = false;
+				if (data[i].userid == userid) {
+					close = true;
+				}
+				var new_comment = comments_template(data[i].commentid, data[i].avatar, data[i].comment_userdata.fullname, data[i].date, data[i].description, close);
+				$('#status_' + data[i].item_id).find('.statuses_comments').prepend(new_comment);
+				$('abbr.timeago').timeago();
+			}
+			$th.parent().hide();
+		}
+            );
+        });
+    });
+
+
+    function close_share() {
+        $(".private .choose").hide();
+        $(".private a").removeClass("active");
+    }
+    try {
+        presence_Test_group_name_hQ8.bind('pusher:subscription_succeeded', function(members) {
+            members.each(function(member) {
+                    $("#user_"+member.id).removeClass("offline").addClass("online").appendTo('.whos_online');
+            });
+        });
+
+        presence_Test_group_name_hQ8.bind('pusher:member_added', function(member) {
+            $("#user_"+member.id).removeClass("offline").addClass("online").appendTo('.whos_online');
+        });
+
+        presence_Test_group_name_hQ8.bind('pusher:member_removed', function(member) {
+            $("#user_"+member.id).removeClass("online").addClass("offline").appendTo('.whos_offline');
+        });
+    } catch(err) {
+        console.log(err);
+    }
+
+
+    function status_template(id, avatar, first_name, last_name, insert_date, status, private_users, close) {
+        var new_status = '';
+        new_status +='<li class="status ';
+
+        if (private_users) {
+            new_status += 'private_status';
+        }
+
+        new_status += '" id="status_'+id+'">';
+        new_status +='	<img src="'+avatar+'" width="40" height="40" class="left" style="margin-right:10px;" />';
+        if (close) {
+            new_status +='	<a class="delete_residents" onclick="$.deleteStatus('+id+');">X</a>';
+        }
+        new_status +='	<span class="info">';
+        new_status +='		<span class="name">'+first_name + ' ' + last_name+' </span>';
+        new_status +='		<abbr class="timeago" title="'+ insert_date+ '"></abbr>';
+        if (private_users) {
+            new_status +=' <div class="private_users"><a class="private_users_link"><img src="https://freedcamp.com/images/wall/private_users.png" width="8" height="11" alt="Private" /></a>';
+            new_status +='             <div class="users_list twipsy below">';
+            new_status +='             	<div class="twipsy-arrow"></div>';
+            new_status +='                 <div class="twipsy-inner">';
+            new_status +='                 	<ul class="unstyled">';
+            var count = private_users.length;
+            for(var i = 0; i < count; i++) {
+                new_status += '<li>'+private_users[i].first_name + ' ' + private_users[i].last_name +' </li>';
+            }
+            new_status +=' </ul>';
+            new_status +='                </div>';
+            new_status +='            </div>';
+            new_status +='        </div><!-- private_users -->';
+        }
+        new_status +='	</span>';
+        new_status +='	<div class="status_content">';
+        new_status +='		' + status + '';
+        new_status +='	</div>';
+        new_status +='	<div class="clear" style="height:10px;"></div>';
+        new_status +='	<ul class="statuses_comments unstyled">';
+        new_status +='	';
+        new_status +='	</ul>';
+        new_status +='	<div>';
+        new_status +='		<form class="new_comment" data-id="'+id+'">';
+        new_status +='			<input class="new_comment" placeholder="enter comment..." type="text" />';
+        new_status +='		</form>';
+        new_status +='	</div>';
+        new_status +='</li>';
+        return new_status;
+    }
+
+    function comments_template(commentid, avatar, user_fullname, date, description, close) {
+        var comment_element = '';
+        comment_element +=
+            '<li id="comment_'+commentid+'">' +
+            '<img src="'+avatar+'" width="30" height="30" class="left" style="margin-right:10px;" />' +
+            '<div class="info">' +
+            user_fullname +
+            ' <abbr class="timeago" title="'+date+'"></abbr>' +
+            '</div>' +
+            '<div class="comment_content">'+ description + '</div>';
+        if (close) {
+            comment_element += '<a class="delete_residents" onclick="$.deleteComment('+commentid+');">x</a>';
+        }
+        comment_element += '<div class="clear"></div>' +
+            '</li>';
+        return comment_element;
+    }
+
+    function more_comments_template(status_id, count) {
+        return '<li><a href="#" class="more_comments" title="'+status_id+'">View '+count+' more...</a></li>';
+    }
+
+    $.submitStatus = function() {
+
+        var postData = {};
+
+        postData['status'] = $('#new_status').val();
+
+        postData['users'] = $('.users_checklist').serializeArray();
+
+        var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/add';
+
+        ajaxRequest(
+           url,
+           postData,
+           function(return_data) {
+		var data = return_data.data;
+                var new_status = status_template(data.id, data.avatar, data.user_info.first_name, data.user_info.last_name, data.insert_date, data.status, data.private_users, true);
+                $('.statuses').prepend(new_status);
+                $('abbr.timeago').timeago();
+                $('#new_status').val('');
+                close_share();
+            }
+        );
+
+    }
+
+    $.deleteStatus = function(status_id) {
+        if(confirm('Are you sure you want to delete that?')) {
+            var postData = {};
+            postData['id'] = status_id;
+
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/delete';
+
+            ajaxRequest( url,
+		postData,               
+                function(data) {                    
+                       $('#status_' + status_id).remove();                    
+                }
+            );
+        }
+    }
+    $.submitComment = function(status_id, comment) {
+
+        var postData = {};
+        postData['status_id'] = status_id;
+        postData['comment'] = comment;
+
+        var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/comment/add';
+
+        ajaxRequest(
+            url,
+	     postData,            
+            function(return_data) {
+		var data = return_data.data;
+                var comment_element = comments_template(data.commentid, data.avatar, data.user_fullname, data.date, data.description, true);
+                $('#status_' + status_id).find('.statuses_comments').append(comment_element);
+                $('abbr.timeago').timeago();
+            }
+        );
+    }
+
+    $.deleteComment = function(comment_id) {
+        if(confirm('Are you sure you want to delete that?')) {
+            var postData = {};
+            postData['comment_id'] = comment_id;
+
+            var url = 'https://freedcamp.com/Test_group_name_hQ8/app/status/comment/delete';
+
+            ajaxRequest(
+                url,
+                postData,                
+                function(data) {                    
+			$('#comment_' + comment_id).remove();                    
+                }
+            );
+        }
+    }
+
+</script>        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-677733-6']);
+            _gaq.push(['_setDomainName', 'freedcamp.com']);
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    </head>
+    <body>
+                
+        <!-- DIALOG CONFIRM -->
+        <div id="confirm_dialog"> <div class="title">Are you sure?</div> <div class="buttons"> <a href="#" class="yes">Yes</a> <a href="#" class="no">No</a> </div> </div>
+        <!-- END DIALOG CONFIRM -->
+        <!-- Start Alexa Certify Javascript -->
+        <script type="text/javascript" src="https://d31qbv1cthcecs.cloudfront.net/atrk.js"></script><script type="text/javascript">_atrk_opts = { atrk_acct: "OQOvg1aAQ700Ws", domain:"freedcamp.com"}; atrk ();</script><noscript><img src="https://d5nxst8fruw4z.cloudfront.net/atrk.gif?account=OQOvg1aAQ700Ws" style="display:none" height="1" width="1" alt="" /></noscript>
+        <!-- End Alexa Certify Javascript -->
+        <div class="ajax_loading" style="display:none; position:fixed; top:0px; left:0px; z-index:9999999; height:16px; width:16px; padding:5px; background-color:#33ac00;"><img src="https://freedcamp.com/images/header/loading.gif" width="16" height="16" alt="loading" /></div>
+        <div id="notification_container" style="display:none; position:fixed; bottom:10px; left:10px; overflow:auto; z-index:999999; width:200px;"></div>
+        <div id="alert_container" style="display:none; position:fixed; bottom:-5px; left:50%; margin-left:-215px; padding:20px 20px 5px 90px; overflow:auto; z-index:999999; width:350px; background:#991a1a url(https://d2fqpvpm0eatx9.cloudfront.net/error.png) no-repeat 20px center; color:#fff; border:1px solid #881414; box-shadow: 0 0 18px 1px rgba(0,0,0,0.47), inset 0 0 0 1px rgba(255,255,255,0.6);"></div>
+        <div class="flash_message hide"></div><!-- flash_message -->
+        <div style="display:none; background-color: rgba(0, 0, 0, 0.4); position:fixed; top:0px; left:0px; z-index:99999; bottom:0px; right:0px;" class="darken"></div>
+        <div class="lighten"></div>
+        <div class="modal">
+            <div class="form">
+
+            </div><!-- form -->
+        </div><!-- modal -->
+        <!-- MOBILE SUGGESTION -->
+        <script>
+            $(function(){
+                if (localStorage.getItem("mobileHide") === null) {
+                    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+                        $("#mobilePopup").show();
+                    }
+                }
+                $("#no_mobile").click(function(e){e.preventDefault();
+                    localStorage.setItem("mobileHide","true");
+                    $("#mobilePopup").hide();
+                });
+            });
+        </script>
+        <div id="mobilePopup" style="position: fixed; display:none; top:10px; left:10px; right:10px; bottom:10px; overflow:auto; background-color:rgba(0,0,0,0.7); z-index: 9999999999; color:#fff; font-size:50px; padding:20px; padding-top:50px; text-align:center; line-height:1.8em; ">
+               <div style="margin-bottom:40px;"> You are on a mobile device, would you like to try <a href="http://m.freedcamp.com" style="color:#fff; font-weight:600; text-decoration: underline;">Freedcamp Mobile</a>? </div>
+               <div><a href="#" id="no_mobile" style="display:block; color:#fff; font-size:1.1em; font-weight:600; padding:10px; background-color:rgba(255,255,255,0.2); text-shadow:0px 1px 0px #000">No Thanks!</a></div>
+        </div>
+        <!-- MOBILE SUGGESTION END -->
+        <noscript>
+            <style>
+                .noscript {position:absolute; top:20%; left:20%; padding:50px; width:500px; height:350px; box-shadow:0 0 5px #000; -moz-box-shadow:0 0 5px #000; border:5px solid #ccc; font-family:Georgia, "Times New Roman", Times, serif; background-color:#fff; z-index:9999999; font-size:1.4em;}
+            </style>
+            <div class="noscript">
+                Please turn javascript on! This website was built using the latest technologies which require JavaScript to function properly!
+            </div>
+        </noscript>
+                <ul class="timer_widget">
+            <li class="handle hidden">
+                <a>
+                                    <img class="widget_indicator" src="https://freedcamp.com/images/timer/inactive.gif" width="27" height="6" alt="active" class="indicator left" />
+                                    <img src="https://freedcamp.com/images/timer/clock.png" width="15" height="16" class="left" /> <span class="label">timers</span>
+                </a>
+                <ul >
+                                                           <li class="add"><a class="load_popup" href="#" data-href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/time/add"><img src="https://freedcamp.com/images/timer/add.png" alt="add time task" class="left" /> add new time task</a></li>
+                </ul>
+                
+            </li>
+        </ul> <!-- timer_widget -->
+                <div class="user_bar">
+            <div class="inner body_width">
+                <div class="left">
+                                        <a href="https://freedcamp.com/dashboard" class="main_dashboard"><img src="https://freedcamp.com/images/header/main_dashboard.png" width="6" height="8"> back to main dashboard</a>
+                                    </div><!-- left -->
+                <div class="right">
+                    <ul id="user_management">
+                        <li><a class="load_popup upgrade_storage" href="#" data-href="https://freedcamp.com/manage/applications/storage/purchase">upgrade storage</a></li>
+                        <li><a href="https://freedcamp.com/manage/account">my account</a></li>
+                        <li><a href="https://freedcamp.com/help">help</a></li>
+                        <li style="border-right:none;"><a href="https://freedcamp.com/logout">logout</a></li>
+                    </ul>
+                </div><!-- right -->
+                <div class="clear" style="height:0px;"></div>
+            </div><!-- user_bar > inner -->
+        </div><!-- user_bar -->
+    <header class="body_width">
+        <div class="project_bar">
+            <div class="left">
+                            <ul class="switcher unstyled" id="switcher">
+                                    <li class="current"><a class="project">Manage Residents</a> <a class="group_link">All Residents</a>
+                          	
+                                	<div class="clear"></div>
+                        <div class="groups">
+                                                                                                <ul class="group unstyled">
+                                        <li><a href="https://freedcamp.com/Test_group_name_hQ8">Site Administration</a>
+                                            <ul class="unstyled">
+                                                                                                                                                <li class="active">
+                                                                                                	<a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/wall">Security</a>
+                                                	<ul>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/casefiles">Case Files</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/Security">Discussions</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/passes">Passes</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/time">Employee Time Mgmt.</a></li>
+                                                                                                            	<li><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/files">Case Files</a></li>
+                                                                                                            </ul><!-- apps -->
+                                                </li>
+                                                                                            </ul>
+                                        </li>
+                                    </ul>
+                                                                                                                                                                                <a data-href="https://freedcamp.com/manage/projects/order" class="load_popup reorder_projects">reorder projects</a>
+                            <style> a.reorder_projects { border-top:1px solid #ccc; display: block; padding:5px 5px 5px 20px; font-style: italic; background:url(https://d2fqpvpm0eatx9.cloudfront.net/reorder.png) no-repeat left center; color:#666; } a.reorder_projects:hover {background-color:#fff; } </style>
+                        </div><!-- groups -->
+                    </li>
+                </ul><!-- switcher -->
+                            </div><!-- left -->                        
+                            <script>
+                    // Zurb jQuery Textchange Extension of jQuery
+                    (function(a){a.event.special.textchange={setup:function(){a(this).data("lastValue",this.contentEditable==="true"?a(this).html():a(this).val());a(this).bind("keyup.textchange",a.event.special.textchange.handler);a(this).bind("cut.textchange paste.textchange input.textchange",a.event.special.textchange.delayedHandler)},teardown:function(){a(this).unbind(".textchange")},handler:function(){a.event.special.textchange.triggerIfChanged(a(this))},delayedHandler:function(){var c=a(this);setTimeout(function(){a.event.special.textchange.triggerIfChanged(c)},
+                            25)},triggerIfChanged:function(a){var b=a[0].contentEditable==="true"?a.html():a.val();b!==a.data("lastValue")&&(a.trigger("textchange",[a.data("lastValue")]),a.data("lastValue",b))}};a.event.special.hastext={setup:function(){a(this).bind("textchange",a.event.special.hastext.handler)},teardown:function(){a(this).unbind("textchange",a.event.special.hastext.handler)},handler:function(c,b){b===""&&b!==a(this).val()&&a(this).trigger("hastext")}};a.event.special.notext={setup:function(){a(this).bind("textchange",
+                            a.event.special.notext.handler)},teardown:function(){a(this).unbind("textchange",a.event.special.notext.handler)},handler:function(c,b){a(this).val()===""&&a(this).val()!==b&&a(this).trigger("notext")}}})(jQuery);
+                    $(function(){
+                        var group_template = "";
+                        group_template += '<ul class="fc_search_result_group">'+
+                                            '<li class="fc_search_result_title">TODOS (5)</li>'+
+                                    '</ul>';
+                        var item_template = "";
+                        item_template += '<li class="fc_search_result_entry"><a href="#"><span class="title">And this is the title of a casefile that has been found within your search query</span> <span class="fc_search_result_date">03/15/89</span></a></li>';
+
+                        var timeout;
+                        $('#fc_project_searchText').bind('textchange', function () {
+                            $th = $(this);
+                            clearTimeout(timeout);
+                            var self = this;
+                            timeout = setTimeout(function () {
+                                if ($th.val().length > 3) {
+                                    $("#fc_project_search").submit();
+                                } else {
+                                    hideSearch();
+                                }
+                            }, 1000);
+                        });
+
+                        $('#fc_project_search').submit(function(e) {
+                            e.preventDefault();
+                            // faster selector reference to store the this
+                            var $th = $(this);
+                            if ($("#fc_project_searchText").val().length > 3) {
+                                ajaxRequest(
+                                    $th.attr('action'),
+                                    $th.serializeFormJSON(),
+                                    function(data) {
+                                        $("#fc_search_results").html("");
+                                        if (data.data.applications.length == 0) {
+                                            $("#fc_search_results").append('<div>There were no results that matched your search criteria</div>');
+                                        } else {
+                                            for (i in data.data.applications) {
+                                                var group = data.data.applications[i];
+                                                var $result_group = $(group_template);
+                                                $result_group.find(".fc_search_result_title").html(i + " ("+ group.length +")");
+                                                for(a in group) {
+                                                    var $result_entry = $(item_template);
+                                                    $result_entry.find(".title").html(group[a].title);
+                                                    var date_patt=/([\d]{4})-([\d]{2})-([\d]{2})\s([\d]{2}):([\d]{2}):([\d]{2})/g;
+                                                    var res = date_patt.exec(group[a].date);
+                                                    if(res != undefined) {
+                                                        res[2] = parseInt(res[2]) - 1;
+                                                        var d = new Date(res[1], res[2], res[3], res[4], res[5], res[6]);
+                                                        $result_entry.find(".fc_search_result_date").html(d.format("shortDate"));
+                                                    }
+                                                    $result_entry.find("a").attr("href",group[a].link);
+                                                    $result_group.append($result_entry);
+                                                }
+                                                $("#fc_search_results").append($result_group);
+                                            }
+                                        }
+                                        $th.addClass("focused");
+                                    }
+                                )
+                            }
+                            return false;
+                        });
+
+                        // HANDLE ALL POSSIBLE CLOSING METHODS - Clicking X, Clicking Outside, Escape Key
+                        $("#fc_project_search a.clear_search").click(function(e){e.preventDefault();
+                            hideSearch();
+                        });
+                        $(document).mouseup(function (e) {
+                            if ($(e.target).parents("#fc_project_search").length == 0) {
+                                hideSearch()
+                            }
+                        });
+                        $(document).keydown(function(e) {
+                            if (e.keyCode == 27) {
+                                hideSearch();
+                            }
+                        });
+                        function hideSearch() {
+                            $('#fc_project_searchText').val("");
+                            $("#fc_project_search").removeClass("focused");
+                        }
+                    });
+                </script>
+                <style>
+                    #fc_project_search { float:left; margin-left:30px; margin-top:14px; position: relative; width:300px;}
+                    #fc_project_search label { text-indent:-99999px; background:#fff url(https://freedcamp.com/images/header/search.png) no-repeat 15px center; display:block; float:left; width:42px; height:30px; border:1px solid #dfdfdf; border-right:0px; margin:0px; }
+                    #fc_project_search.focused label {height:31px; position: relative; border-bottom-color: #fff; z-index:80; border-right:1px solid #dfdfdf;}
+                    #fc_project_search a.clear_search {display:none;}
+                    #fc_project_search.focused a.clear_search { position: absolute; right:55px; top:7px; background-color:#eee; color:#666; padding:2px 6px; border-radius: 10px; font-size: 11px; font-family: Arial; font-style: normal; font-weight: bold; z-index:9; display: block; }
+                    #fc_project_search input[type=text]#fc_project_searchText { border:1px solid #dfdfdf; border-left:0px; height:20px; padding:5px; background:#fff; box-shadow:none; border-radius: 0px; margin:0px; width:200px; }
+                    /*#fc_project_search.focused input[type=text]#fc_project_searchText {margin-left:44px;}*/
+                    ::-webkit-input-placeholder { color: #ddd; }
+                    :-moz-placeholder { color: #ddd; }
+                    #fc_project_search #fc_search_results {position: absolute; display:none; top:31px; left:0px; border:1px solid #dfdfdf; z-index:70; width: 600px; background-color:#fff; padding:20px; }
+                    #fc_project_search .fc_search_result_group li.fc_search_result_title {text-transform: uppercase; color:#666; font-weight: 600; font-size:10px; border-bottom:1px solid #ccc; padding-bottom:6px; margin-bottom:0px;}
+                    #fc_project_search .fc_search_result_group {margin-bottom:12px;}
+                    #fc_project_search .fc_search_result_group:last-child {margin-bottom:0px;}
+                    #fc_project_search .fc_search_result_group li:last-child a {border-bottom:none;}
+                    #fc_project_search .fc_search_result_group li a {display: block; padding:12px 3px; color:#07599F; border-bottom:1px solid #ddd; text-shadow:0px 1px 0px #fff;}
+                    #fc_project_search .fc_search_result_group li a:hover {background-color:whiteSmoke;}
+                    #fc_project_search .fc_search_result_group li a .fc_search_result_date {float:right; color:#ccc;}
+                    #fc_project_search.focused #fc_search_results {display:block;}
+                </style>
+                <form action="https://freedcamp.com/manage/Test_group_name_hQ8/Test_project_na_ASU/search" id="fc_project_search" >
+                    <label for="fc_project_searchText">search</label>
+                    <input type="text" class="searchText" id="fc_project_searchText" placeholder="search project" name="search_text" />
+                    <a href="#" class="clear_search">X</a>
+                    <div class="clear"></div>
+                    <div id="fc_search_results">
+
+                    </div>
+                </form>
+                        <div class="right">
+                <ul class="unstyled" id="management">
+                	<li id="project_templates"><a href="https://freedcamp.com/manage/templates">project templates</a></li>
+                    <li id="manage_projects"><a href="https://freedcamp.com/manage">manage projects</a></li>
+                    <li id="marketplace"><a href="https://freedcamp.com/marketplace">marketplace</a></li>
+                </ul>
+            </div><!-- right -->
+            <div class="clear" style="height:0px"></div>
+        </div><!-- project_bar -->
+        <div class="clear" style="height:0px"></div>
+    </header>
+    <div class="application_bar">
+            <ul class="applications body_width " id="applications">
+<!-- project applications -->
+                            <li class="<?php echo $this->$residentTabCssActive;?><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/wall" style="background-image:url(https://freedcamp.com/cdn/group_apps/wall/images/icons/small_icon.png);">Residents</a></li>
+                            <li class="<?php echo $this->$casefileTabCssActive;?><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/casefiles" style="background-image:url(https://freedcamp.com/cdn/project_apps/casefiles/images/icons/small_icon.png);">Case Files</a></li>
+                            <li class="<?php echo $this->$discussionsTabCssActive;?><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/Security" style="background-image:url(https://freedcamp.com/cdn/project_apps/Security/images/icons/small_icon.png);">Discussions</a></li>
+                            <li class="<?php echo $this->$passesTabCssActive;?><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/passes" style="background-image:url(https://freedcamp.com/cdn/project_apps/passes/images/icons/small_icon.png);">Passes</a></li>
+                            <li class="<?php echo $this->$employeeTimeTabCssActive;?><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/time" style="background-image:url(https://freedcamp.com/cdn/project_apps/time/images/icons/small_icon.png);">Employee Time Mgmt.</a></li>
+                            <li class="<?php echo $this->$casefileTabCssActive;?><a href="https://freedcamp.com/Test_group_name_hQ8/Test_project_na_ASU/files" style="background-image:url(https://freedcamp.com/cdn/project_apps/files/images/icons/small_icon.png);">Case Files</a></li>
+                                <!-- group applications -->
+                                <!-- user applications -->
+                                                        <li id="marketplace_add"><a title="Add More Applications" href="#" data-href="https://freedcamp.com/manage/Test_group_name_hQ8/Test_project_na_ASU/applications" class="load_popup">&nbsp;</a></li>
+                    </ul> 
+    </div><!-- application_bar -->
+    <div class="clear"></div><div class="action_bar body_width" style="height:10px">
+</div><!-- action_bar -->
+<div class="content body_width">
+    <div class="col_80 first">
+    <div>
+        <form class="add_status">
+            <script>
+                    var residents_max_characters = 600;
+
+                    function countchars(){
+                        //get the data in the field
+                        var text = $("#new_status").val();
+
+                        //set number of characters
+                        var numofchars = text.length;
+                        //set the chars left
+                        var chars_left = residents_max_characters - numofchars;
+
+                        //check if we are still within our maximum number of characters or not
+                        if(numofchars <= residents_max_characters)
+                        {
+                            //set the length of the text into the counter span
+                            $("#rem_chrs_cnt").html("").html(chars_left).css("color", (chars_left <=10 ? "#000000" : "#666")).css("font-weight", 'normal');
+                            $('#sbmt_status').attr('disabled', (0==numofchars ? true : false));
+                        }
+                        else
+                        {
+                            //style numbers in red
+                            $("#rem_chrs_cnt").html("").html(chars_left).css("color", "#FF0000").css("font-weight", 'bold');
+                            $('#sbmt_status').attr('disabled', true);
+                        }
+                    }
+                $(function(){
+                    //http://whattheheadsaid.com/projects/input-special-event
+                    $("#rem_chrs_cnt").html(residents_max_characters);
+
+                    if($.browser.msie) {
+                        $('#new_status').bind('input propertychange', function() {
+                            countchars();
+                        });
+                        $('#new_status').bind('keyup', null, function(e) {
+                            countchars();
+                        });
+
+                    } else {
+                        $('#new_status').bind('input', null, function(e) {
+                            countchars();
+                        });
+                    }
+                    
+                    var co_workers = [{"user_id":"178405","first_name":"Ken","last_name":"Wiltshire","email":"wiltshirek@gmail.com","last_login":"1371236357"}];
+                    
+                    var co_workers_for_autocomplete = [];
+                    
+                    for(var p = 0; p < co_workers.length ;p++) {
+                        var user_fullname = co_workers[p]['first_name'] + ' ' + co_workers[p]['last_name'];
+                        co_workers_for_autocomplete.push(user_fullname);
+                    }
+                    
+                    $('#new_status').keypress(function(e){
+                        if(e.which == 64) {
+                            $('#new_status').autocomplete('enable');
+                        }
+                    });
+                    
+                    $('#new_status').autocomplete({                        
+                        source:function(request,response) {
+                            
+                            var words = request.term.split('@');
+                            
+                            var request_term = words[words.length - 1];
+                            
+                            var matcher = new RegExp( $.ui.autocomplete.escapeRegex( request_term ), "i" );
+                            response( $.grep( co_workers_for_autocomplete, function( item ){
+                                return matcher.test( item );
+                            }) );
+                        },
+                        select:function(event,ui) {          
+                           var text = $('#new_status').val().split('@');
+                           text.pop();
+                           var text_to_amp = text.join('@');
+                           
+                           var new_text = text_to_amp + '@' + ui.item.value;
+                           
+                           $('#new_status').val(new_text);
+                           
+                           return false;
+                        },
+                        focus:function(event,ui) {                                      
+                           return false;
+                        },
+                        minLength: 2
+                    });
+                    $('#new_status').autocomplete('disable');
+                });
+            </script>
+            <textarea name="status" id="new_status" style="width:99%; padding:5px; height:auto; line-height:1.6em;" value=""></textarea>
+            <div class="private"><a href="#">Everyone</a>
+                <div class="choose">
+                    <label><input type="checkbox" name="users[]" value="0" class="everyone_checklist" checked /> Everyone</label>
+                                        <label><input type="checkbox" name="users[]" value="178405" class="users_checklist"  />Ken Wiltshire</label>
+                                    </div><!-- choose -->
+                <div class="remaining">
+                	<span id="rem_chrs_cnt"></span> remaining chars
+                </div>
+            </div><!-- private -->
+            <input type="submit" id="sbmt_status" class="right" value="Submit" disabled />
+            <div class="clear"></div>
+        </form>
+    </div>
+    <ul class="statuses unstyled">
+            </ul>
+    <div class="view_more">
+        <a href="#" class="add_more">View More</a>
+    </div><!-- view_more -->
+</div><!-- col_80 -->
+<div class="col_20 last">
+    <h3>Who's Online</h3>
+    <ul class="whos_online unstyled">
+        
+    </ul>
+    <ul class="whos_offline unstyled">
+                    <li id="user_178405" class="offline">Ken Wiltshire <abbr class="timeago" title="2013-06-14 18:59:17"></abbr></li>
+            </ul>
+</div><!-- col_20 --></div><!-- end content -->
+<div class="clear"></div>
+<footer>
+</footer>
+<script src="https://freedcamp.com/js/notifications.js"></script>
+<script src="https://freedcamp.com/js/main.js?version=8"></script>
+
+<script>
+    var time_ids = new Array();
+    var refreshAfterClose = false;
+    function load_popup(data) {
+        if(!empty(data.fchref)) {
+            var link_url = data.fchref;
+        } else {
+            var link_url = (typeof data !== "object") ? data : data.href;
+        }
+        var wd = (data.width != null) ? data.width : 500;
+        var editor = (data.edit != null) ? true : false;
+        ajaxRequest(link_url, 
+        {},
+        function(response) {
+            $(".lighten").fadeIn("slow");
+            $(".modal .form").append(response.data.html);
+            $(".modal").slideDown("slow").width(wd).css({"margin-left":(-wd/2)});
+            $("html:not(:animated),body:not(:animated)").animate({ scrollTop: 0});
+            if (editor) {
+                if (data.type == 'advanced') {
+                    var editor_options = {
+                        toolbar: null,
+                        uiColor : '#F0F0F0',
+                        autoGrow_bottomSpace: '10',
+                        autoGrow_maxHeight: 400,
+                        height : '400px',
+                        width   : '95%',
+                        fillEmptyBlocks: false,
+                        IgnoreEmptyParagraphValue: true,
+                        AutoParagraph: false,
+                        scayt_autoStartup:true
+                    };
+                } else {
+                    var editor_options = {
+                        toolbar: [['Bold', 'Italic', '-', 'NumberedList', 'BulletedList','Outdent','Indent', '-','SpellChecker', 'Link', 'Unlink','-','Cut','Copy','Format','JustifyLeft','JustifyCenter','JustifyRight','-','Maximize']],
+                        uiColor : '#F0F0F0',
+                        autoGrow_bottomSpace: '10',
+                        autoGrow_maxHeight: 400,
+                        height : '100px',
+                        width   : '95%',
+                        fillEmptyBlocks: false,
+                        IgnoreEmptyParagraphValue: true,
+                        AutoParagraph: false,
+                        scayt_autoStartup:true
+                    };
+                }
+
+                $(".ckeditor").ckeditor(editor_options);
+            }
+        },
+        {type:'GET'}
+        );
+			
+    }
+    $(function(){
+		
+		// FILE DOWNLOAD OR VIEW DIALOG
+		$(".file_dialog").live("click",function(e){e.preventDefault();
+			$(".file_dialog_list_wrap").remove();
+			var $th = $(this);
+			var dialog = "";
+				dialog 	+= 	'<div class="file_dialog_list_wrap"><img src="https://freedcamp.com/images/files/dialog_arrow.png" class="dialog_arrow" />' +
+							'<ul class="file_dialog_list">' +
+							'<li class="f_view_versions"><a href="'+$th.data("versions-href")+'">View Versions & Comments</a></li>'+
+							'<li class="f_download_file"><a href="'+$th.data("download-href")+'" target="_blank">Download File</a></li>' +
+							'</ul></div>';
+				$("body").append(dialog);
+				$(".file_dialog_list_wrap").css({'left':e.pageX + 30, 'top':e.pageY - 30});	
+		});
+		$(document).mouseup(function (e) { 
+            if ($(e.target).parents(".file_dialog_list_wrap").length == 0) {
+                $(".file_dialog_list_wrap").remove();
+            }
+        });
+		
+        start_timers();
+        
+        // timeago plugin
+        $('abbr.timeago').timeago();
+
+        // userbar dropdowns
+        $("li.handle > a").live("click",function(){
+            $th = $(this).parents('.handle');
+            if ($th.hasClass("hidden")) {
+                $th.removeClass("hidden");
+                //start_timers();
+            } else {
+                $th.addClass("hidden");
+                //stop_timers();
+            }
+        });
+
+        $('.control').live('click', function(e) {
+            e.preventDefault();
+            var $th = $(this);
+            var $parent_li = $(this).parents('.time_widget_item');
+            var href = $th.attr('href');
+            ajaxRequest(href,{}, function(data) {
+                var parent = $parent_li.find('.time_widget_control');
+                var link = $parent_li.find('.control_link').val();
+                var time_id = $parent_li.attr('data-id');
+                if (time_ids.length > 0) {
+                    $('.widget_indicator').attr('src', 'https://freedcamp.com/images/timer/active.gif');
+                } else {
+                    $('.widget_indicator').attr('src', 'https://freedcamp.com/images/timer/inactive.gif');
+                }
+                if ($th.hasClass('start')) {
+                    parent.html('<a class="stop control" href="'+link+'stop/'+time_id+'" onclick="w_stop_'+time_id+'();"></a>');
+                } else {
+                    parent.html('<a class="start control" href="'+link+'start/'+time_id+'" onclick="w_start_'+time_id+'();"></a>');
+                }
+            },{type:'GET'});
+        });
+        
+        // project dropdown
+        $(".switcher > li.current").live("click", function(){
+            var $this = $(this);
+            var $parent = $this.parents("ul");
+            if ($parent.hasClass("active")) {
+                $("div.groups").slideUp(300, function(){
+                    $parent.removeClass("active");
+                });
+            } else {
+                $parent.addClass("active");
+                $("div.groups").slideDown();
+            }
+        });
+        // notifications
+        var flash_message = $(".flash_message");
+        if (!(flash_message.html() == "")) {
+            flash_action(flash_message.html());
+        }
+        function flash_action(message) {
+            var $message = $(".flash_message");
+            $message.html(message);
+            $message.slideDown().delay(2000).slideUp();
+        }
+        
+        // define flash action under jquery namespace
+        $.extend( {
+            flash_action: function(message) { 
+                var $message = $(".flash_message");
+                $message.html(message);
+                $message.slideDown().delay(2000).slideUp();
+            }
+        });
+                
+        
+        // cloase popup
+        function close_popup(reload) {
+            if ( reload )  {  window.location.reload(); }
+            popup_open = false;
+            if ($(".modal .ckeditor").length > 0) {
+                var editorID = $(".ckeditor").attr("name");
+                var instance = CKEDITOR.instances[editorID];
+                if (instance) {CKEDITOR.remove(instance);}
+            }
+            $(".lighten").hide();
+            $(".modal").slideUp("slow", function (){
+                $(".modal .form").html("");
+            });	
+        }
+        $(".load_popup").live("click", function(e){ 
+            e.preventDefault();
+            if (!popup_open) {
+                load_popup($(this).data());
+                popup_open = true;
+            }
+        });
+        
+        $(".modal .form form").live("submit", function(e){
+            
+            var $th = $(this);
+
+            // add a grayed out cover over form to let user know it's being submitted mainly for adding comments and waiting forever
+            $th.css({"position":"relative"});
+            var $cover = $('<div id="temp_cover_ajax"><img src="https://freedcamp.com//images/ajax-loader.gif" style="position:absolute; top:50%; left:50%;" /></div>');
+            $th.append($cover);
+
+            if ($th.attr("data-ignore-form") != "true") {
+                e.preventDefault();
+                $th.find("input[type=submit]").attr("disabled","true");                
+                var action = $(this).attr("action");
+                   
+                var onSuccess = function() { };
+                if(typeof($.popupCustomClose) == 'function') {
+                    onSuccess = $.popupCustomClose;
+                }
+                                
+                ajaxRequest(action,$th.serializeFormJSON(),onSuccess);
+
+                return false;
+            }            
+        });
+        
+        $(".modal .footer .cancel").live("click", function(e){
+            e.preventDefault();
+            close_popup();
+            if(refreshAfterClose) {
+                window.location.reload();
+            }
+        });
+        $(document).keydown(function(e) {
+            if (e.keyCode == 27) {
+                close_popup();
+            }
+        });
+        $(document).mouseup(function (e) { 
+            if ($(e.target).parents(".switcher").length == 0) {
+                if ($(".switcher").hasClass("active")) {
+                    $("div.groups").slideUp(300, function(){
+                        $(".switcher").removeClass("active");
+                    });
+                }
+            }
+        });
+        $(".add_new_group").live("click", function(e){
+            e.preventDefault();            
+            $(".group_dropdown").hide().remove();
+            $(".group_name").show();            
+            $(this).hide();
+        });
+        
+    });
+    function pad(number, length) {
+        var str = '' + number;
+        while (str.length < length) {
+            str = '0' + str;
+        }
+        return str;
+    }
+    
+    $(document).ajaxStart(function(){
+        ajax(true);
+    });
+    $(document).ajaxComplete(function(e, xhr){
+        ajax(false);
+        if ( xhr.status == 399 ) {
+            try {
+                var result = $.parseJSON(xhr.responseText);                
+                $(".lighten").hide();
+                var $message = $(".flash_message");
+                $message.html('Please log in to continue. <a href="https://freedcamp.com/login?location=' + url_to_application + '">Log In</a>');
+                $message.slideDown();
+            } catch (e) {
+                return;
+            }
+        }
+    });
+
+    function start_timers() {
+        };
+
+    function stop_timers() {
+        for(var i in time_ids) {
+            if (time_ids[i] != "") {
+                clearInterval(time_ids[i]);
+            }
+        }
+    };
+
+        // timer widget functions
+    </script>
+
+<script id="IntercomSettingsScriptTag">
+  var intercomSettings = {
+    app_id: 'ux9lemly',
+    email: 'wiltshirek@gmail.com', 
+    created_at: 1371236357,
+    name: 'Ken Wiltshire',
+    user_id: '178405'
+  };
+</script>
+<script>
+  (function() {
+    var i=function(){i.c(arguments)};i.q=[];
+    i.c=function(args){i.q.push(args)};window.Intercom=i;
+    function async_load() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript'; s.async = true;
+      s.src = 'https://api.intercom.io/api/js/library.js';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+    }
+    if (window.attachEvent) {
+      window.attachEvent('onload', async_load);
+    } else {
+      window.addEventListener('load', async_load, false);
+    }
+  })();
+</script>
+<p>
+    <a href="<?php echo $this->url('album', array('action'=>'add'));?>">Add new album</a>
+</p>
+</body>
+</html>
+ 

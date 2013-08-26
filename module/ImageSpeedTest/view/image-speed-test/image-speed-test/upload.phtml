@@ -1,0 +1,161 @@
+<?php $form = $this->form;?>
+
+<script>
+$(function()
+{ 
+   /** uncomment to activate onBlur for all 
+	   inputs
+**/
+	
+   /** $(":input").blur(function()
+    {
+        var formElementId = $(this).get(0).id;
+      
+        console.log("elementId:" + formElementId);
+        return doValidation(formElementId);
+       
+    });**/
+/**$("form").submit(function () 
+   { 
+ 	   //clear currently displayed error
+    	$('#errorMsg-url').html("<p></p>")
+		return doValidation();
+	   
+ });});
+**/
+	$("form").submit(function () 
+			   { 
+			 	   //clear currently displayed error
+			    	$('#errorMsg-url').html("<p></p>")
+			    	success = doValidation();
+					if (success){
+						//disable page show processing
+						    $.blockUI({ 
+					            centerY: 0, 
+					            css: { top: '100px', left: '', right: '100px' } 
+					        }); 
+					 	return true;
+					}
+					return false;
+				   
+			 });});
+
+
+
+
+
+
+
+function count(obj) { return Object.keys(obj).length; }
+
+
+ function doValidation(id){
+	 var ajaxFormValidator = '/imagespeedtest/validateform';
+	 var data = {};//tell browser we are dealing with a json object
+	 var hasErrors = false;
+     $("input").each(function()
+     {
+       	 data[$(this).attr('name')] = $(this).val(); 	    
+     });
+     
+     
+     $.ajaxSetup({async: false});
+	 $.post(ajaxFormValidator,data,function(resp)
+	{
+		 
+		 if (count(resp)>0)
+			 hasErrors = true;
+		 if (!hasErrors){
+				 return;//all clear
+		 }
+		 if ( id != null){//blur event
+		 	$("#"+id).parent().find('.errors').remove();
+		 	$("#"+id).parent().append(getErrorHtml(resp[id], id));
+		 }
+		 else //submit event, validate whole form
+		 {
+			 $("input").each(function()
+				     {
+				     inputId = $(this).attr('id');
+				     errorMsgs = resp[inputId];
+				     $("#"+ inputId).parent().find('.errors').remove();
+					 $("#"+ inputId).parent().append(getErrorHtml(errorMsgs, inputId));
+				         
+				     });
+		     return false;
+
+		 }
+	},'json'); 
+	return !hasErrors;	 
+ }
+
+ 
+ function getErrorHtml(formErrors, id)
+ {
+	  var o = '<div id="errorMsg-'+id+'" <ul id="errors-'+id+'" class="errors">';
+	  for ( errorKey in formErrors)
+	  {
+		 
+		  o+='<li>' + formErrors[errorKey] + '</li>';
+
+		  } 
+	  o+='</ul></div>';
+	  console.log(o);
+	  return o;
+ }
+	  
+</script>
+
+
+
+
+
+
+<?php
+
+use Zend\Form\Element;
+use ImageSpeedTest\Utility;
+
+$title = 'Image Load Speed Test';
+$this->headTitle($title);
+
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+
+<?php
+		//$form = $this->form;
+		$form->setAttribute('action', $this->url('imagespeedtest', array('action' => 'testurl')));
+		$form->prepare();?>
+
+		
+<?php echo $this->form()->openTag($form);
+//phpinfo();
+//$this->getRequest()->getPost('id', null);
+
+?>  
+   <div id='instructions' class="form-element">
+    <p>Enter a fully qualified absolute url i.e. http://www.amazon.com.  Url Validation is performed via jQuery post to server.</p><br/>
+    <p>Try one of my Favorites: http://www.amazon.com, http://www.ebay.com</p>
+        <div id="error_div"><?php echo $this->formRow($form->get('url'));  ?></div>
+    </div>
+
+    <button>Submit</button>
+
+<?php echo $this->form()->closeTag(); ?>
+
+
+<script>
+$(":input").focusin( function() {
+	$('#' + 'errorMsg-' + $(this).get(0).id).html("<p></p>")
+});
+
+$(document).ready(function() {
+	$('#instructions a').click(function (e) {
+	    e.preventDefault();
+		$('#url').value('http://www.amazon.com')
+	});
+}
+
+
+</script>

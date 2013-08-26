@@ -25,9 +25,9 @@ return array(
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action
             'application' => array(
-                'type'    => 'Literal',
+                'type'    => 'Segment', //'Literal',
                 'options' => array(
-                    'route'    => '/application',
+                    'route'    => '/application/index[/:cssActiveTab]', //added after application/
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller'    => 'Index',

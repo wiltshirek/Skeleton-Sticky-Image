@@ -6,6 +6,15 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+
+
+/**
+ * Note:  this class is essentially replaced when using Doctrine
+ * By the associated entity.  For all intents and purpose
+ * Doctrine is the Model.
+ * @author wiltshirek
+ *
+ */
 class Album implements InputFilterAwareInterface
 {
     public $id;

@@ -35,3 +35,7 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
+
+.monitor-site-wrapper {
+	background: url("../img/header-clean-no-logo.jpg") no-repeat scroll center top transparent;
+}

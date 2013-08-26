@@ -14,8 +14,19 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
-    public function indexAction()
+	public function init()
+	{
+	    $ajaxContext = $this->_helper->getHelper('AjaxContext');
+	    $ajaxContext->addActionContext('list', 'html')
+	                ->addActionContext('modify', 'html')
+	                ->initContext();
+	}
+	
+	
+	
+	public function indexAction()
     {
-        return new ViewModel();
+    	$cssActiveTab = $this->getEvent()->getRouteMatch()->getParam('cssActiveTab');
+       return new ViewModel(array('cssActiveTab' => $cssActiveTab));
     }
 }
