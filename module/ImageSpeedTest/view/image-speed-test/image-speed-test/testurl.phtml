@@ -35,7 +35,11 @@ $(function(){
 <h1><?php echo $this->escapeHtml($title);?></h1>
 <?php $array = $this->imgInfo['imgProperties'];
 	$i=0; 
-	foreach ($array as  $value) { 
+	
+	if (isset($array))
+	{
+		foreach ($array as  $value) { 
+
 		$i++;?>
 		<p>	
 			<?php echo $value['url'];
@@ -51,7 +55,10 @@ $(function(){
 			<?php }?>	 	
 		</p>
 	
-<?php } ?>
+<?php }
+	}else { ?>
+	<h4>Url contains no images to load.  Press back and try another URL.  i.e. http://www.ebay.com</h4><br/>
+	<?php }?>	
 		<h4>Total image load time: <?php echo $this->imgInfo['totalImgLoadTime'];?> </h4><br/>
 		<h4> Average image load time: <?php echo $this->imgInfo['avgLoadTime'];?></h4><br/>			
 	

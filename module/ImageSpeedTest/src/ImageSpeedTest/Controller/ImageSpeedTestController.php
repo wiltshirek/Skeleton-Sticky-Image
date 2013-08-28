@@ -99,6 +99,9 @@ private function getImageInfo($url){
 			$worstImgLoadTime = ($elapsedTime>$worstImgLoadTime ? $elapsedTime:$worstImgLoadTime);
 			
 		}
+		if ($imgElements->length==0)//no images to load
+			return;
+		
 		$avgLoadTime=$totalImgLoadTime / $imgElements->length;	
 		$imgLoadInfo['totalImgLoadTime'] =  $totalImgLoadTime;
 		$imgLoadInfo['avgLoadTime'] = $avgLoadTime;
